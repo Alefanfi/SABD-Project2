@@ -15,7 +15,7 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
     volumes:
-      - ./target:/queries/
+      - ./target:/opt/flink/queries/
 
   taskmanager:
     image: flink:latest
@@ -36,6 +36,7 @@ services:
     ports:
       - '9090:8080' # Web ui port
     volumes:
+      - ./dataset:/input/
       - nifi_volume:/opt/nifi/nifi-current/conf/
 
 volumes:
