@@ -8,7 +8,7 @@ services:
     image: flink:latest
     container_name: jobmanager
     ports:
-      - "8081:8081"
+      - "8081:8081" # Web ui port
     command: jobmanager
     environment:
       - |
@@ -34,10 +34,12 @@ services:
     image: apache/nifi
     container_name: nifi
     ports:
-      - '9090:8080' # Web ui port
+      - '8080:8080' # Web ui port
     volumes:
-      - ./dataset:/input/
+      - ./nifi:/nifi-conf/
       - nifi_volume:/opt/nifi/nifi-current/conf/
+
+#-----------------------------------------------------------------------------------------------------------------------
 
 volumes:
   nifi_volume:

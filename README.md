@@ -4,3 +4,4 @@
   <img width=200px" height="200px" src="https://github.com/Alefanfi/SABD-Project2/blob/main/logo/logo.png?raw=true">
 </p>
 
+This project uses the Apache Flink framework to 
