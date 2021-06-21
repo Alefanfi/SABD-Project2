@@ -57,7 +57,7 @@ public class Query1 {
 
         SinkFunction<String> nifiSink = new NiFiSink<>(clientConfig2, (NiFiDataPacketBuilder<String>) (s, ctx) -> new StandardNiFiDataPacket(s.getBytes(), new HashMap<>()));
 
-        prova.addSink(nifiSink);
+        //prova.addSink(nifiSink);
 
         streamExecEnv.execute("Query 1");
     }
