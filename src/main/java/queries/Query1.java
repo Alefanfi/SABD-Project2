@@ -8,18 +8,23 @@ import org.apache.flink.streaming.connectors.nifi.*;
 import org.apache.flink.util.Collector;
 import org.apache.nifi.remote.client.SiteToSiteClient;
 import org.apache.nifi.remote.client.SiteToSiteClientConfig;
-import scala.Tuple2;
+import pojo.Record;
 
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class Query1 {
 
     public static void main(String[] args) throws Exception {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+
         StreamExecutionEnvironment streamExecEnv = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        // Taking dataset from nifi
+        // Taking data from nifi
         SiteToSiteClientConfig clientConfig = new SiteToSiteClient.Builder()
                 .url("http://nifi:8080/nifi")
                 .portName("dataset")
@@ -28,22 +33,26 @@ public class Query1 {
 
         SourceFunction<NiFiDataPacket> nifiSource = new NiFiSource(clientConfig);
 
-        DataStream<Tuple2<Tuple2<String, String>, Integer>> prova = streamExecEnv
-                .addSource(nifiSource)
-                .flatMap( (NiFiDataPacket value, Collector<Tuple2<Tuple2<String, String>, Integer>> out) -> {
+        DataStream<Record> prova = streamExecEnv
+                .addSource(nifiSource) // Add nifi source
+                .flatMap( (NiFiDataPacket value, Collector<Record> out) -> {
 
                     String file = new String(value.getContent(), Charset.defaultCharset());
                     String[] lines = file.split("\n"); // Splitting file by line
 
                     Arrays.stream(lines).forEach( line -> {
 
-                        String[] elems = line.split(",");
+                        String[] elems = line.split(","); // Split line by ','
 
-                        String aiuto = "help";
+                        Record r = null;
 
-                        Tuple2<Tuple2<String, String>, Integer> tuple = new Tuple2<>(new Tuple2<>(elems[7], aiuto), Integer.parseInt(elems[1])); // (( ts, aiuto), ship_type)
+                        try {
+                            r = new Record(elems[0], Integer.parseInt(elems[1]), Double.parseDouble(elems[2]), Double.parseDouble(elems[3]), formatter.parse(elems[4]), elems[5]);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
-                        out.collect(tuple);
+                        out.collect(r); // each record has : ship_id, ship_type, cell_id, ts, trip_id
                     });
 
                 });

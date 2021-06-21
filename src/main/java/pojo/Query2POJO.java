@@ -1,7 +1,6 @@
-package dati;
+package pojo;
 
 import org.apache.flink.streaming.connectors.nifi.NiFiDataPacket;
-import queries.Query2;
 
 import java.nio.charset.Charset;
 import java.sql.Timestamp;
