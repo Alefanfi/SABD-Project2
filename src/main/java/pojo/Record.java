@@ -1,6 +1,7 @@
 package pojo;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Record implements Serializable {
@@ -10,8 +11,9 @@ public class Record implements Serializable {
     private String id;      // ship id
     private Shiptype type;  // ship type
     private String cell;    // cell id
-    private Date ts;      // timestamp
+    private Date ts;        // timestamp
     private String trip;    // trip id
+
 
     public Record(String id, int type, double lon, double lat, Date ts, String trip) {
 
@@ -49,17 +51,30 @@ public class Record implements Serializable {
 
     private String defineCellId(double lon, double lat){
 
-        return "da_fare";
+        double minlat = 32.0;
+        double maxlat = 45.0;
+        double minlon = -6.0;
+        double maxlon = 37.0;
+
+        double latbin = (maxlat - minlat)/10;
+        double lonbin = (maxlon - minlon)/40;
+
+        char cell_x = (char)('A' + ((int) Math.ceil((lat - minlat)/latbin)) -1);
+        int cell_y = (int) Math.ceil((lon - minlon)/lonbin);
+
+        return "" + cell_x + cell_y;
     }
 
     // Returns a string with all the record's info
     public String toString(){
 
-        return id + "," + type.name() + "," + cell + "," + ts + "," + trip;
+        SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+
+        return id + "," + type.name() + "," + cell + "," + formatter.format(ts) + "," + trip;
 
     }
 
-    //Getters and Setters ----------------------------------------------------------------------------------------------
+// Getters and Setters -------------------------------------------------------------------------------------------------
 
     public String getId() {
         return id;
@@ -100,4 +115,7 @@ public class Record implements Serializable {
     public void setTrip(String trip) {
         this.trip = trip;
     }
+
+// ---------------------------------------------------------------------------------------------------------------------
+
 }

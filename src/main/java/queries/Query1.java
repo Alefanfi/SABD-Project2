@@ -1,9 +1,12 @@
 package queries;
 
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.nifi.*;
 import org.apache.flink.util.Collector;
 import org.apache.nifi.remote.client.SiteToSiteClient;
@@ -14,15 +17,17 @@ import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 
 public class Query1 {
 
     public static void main(String[] args) throws Exception {
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
 
-        StreamExecutionEnvironment streamExecEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment streamExecEnv = StreamExecutionEnvironment
+                .getExecutionEnvironment();
 
         // Taking data from nifi
         SiteToSiteClientConfig clientConfig = new SiteToSiteClient.Builder()
@@ -38,24 +43,33 @@ public class Query1 {
                 .flatMap( (NiFiDataPacket value, Collector<Record> out) -> {
 
                     String file = new String(value.getContent(), Charset.defaultCharset());
+                    file = file.substring(file.indexOf("\n")+1);
+
                     String[] lines = file.split("\n"); // Splitting file by line
+
+
 
                     Arrays.stream(lines).forEach( line -> {
 
                         String[] elems = line.split(","); // Split line by ','
 
-                        Record r = null;
-
+                        Date date = null;
                         try {
-                            r = new Record(elems[0], Integer.parseInt(elems[1]), Double.parseDouble(elems[2]), Double.parseDouble(elems[3]), formatter.parse(elems[4]), elems[5]);
+                            date = formatter.parse(elems[4]);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
-                        out.collect(r); // each record has : ship_id, ship_type, cell_id, ts, trip_id
+                        Record r = new Record(elems[0], Integer.parseInt(elems[1]), Double.parseDouble(elems[2]), Double.parseDouble(elems[3]), date, elems[5]);
+
+                        out.collect(r); // each record has : (ship_id, ship_type, cell_id, ts, trip_id)
                     });
 
-                });
+                })
+                .returns(Record.class)
+                //.keyBy(Record::getTs)
+                //.window(TumblingEventTimeWindows.of(Time.days(7), Time.hours(-8)))
+                ;
 
 
         SiteToSiteClientConfig clientConfig2 = new SiteToSiteClient.Builder()
