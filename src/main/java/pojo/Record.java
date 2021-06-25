@@ -1,7 +1,12 @@
 package pojo;
 
+import org.apache.flink.streaming.connectors.nifi.NiFiDataPacket;
+
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Record implements Serializable {
@@ -11,9 +16,14 @@ public class Record implements Serializable {
     private String id;      // ship id
     private Shiptype type;  // ship type
     private String cell;    // cell id
-    private Date ts;        // timestamp
+    private Date ts;      // timestamp
     private String trip;    // trip id
+    private String ore;     //ore
 
+    private String typeSea; //tipo di mare
+
+    private double lon;
+    private double lat;
 
     public Record(String id, int type, double lon, double lat, Date ts, String trip) {
 
@@ -25,6 +35,19 @@ public class Record implements Serializable {
 
     }
 
+    public Record(String ore, String id, int type, double lon, double lat, Date ts, String trip) {
+
+        this.ore = ore;
+        this.id = id;
+        this.type = defineShipType(type);
+        this.lon = lon;
+        this.lat = lat;
+        this.cell = this.defineCellId(lon, lat);
+        this.ts = ts;
+        this.trip = trip;
+        this.typeSea = this.defineSea(lon, lat);
+    }
+
     /*
     Returns the ship's type:
             MILITARY = 35
@@ -32,7 +55,7 @@ public class Record implements Serializable {
             CARGO = 70-79
             OTHER
      */
-    private Shiptype defineShipType(int type){
+    private static Shiptype defineShipType(int type){
 
         if(type == 35){
             return Shiptype.MILITARY;
@@ -65,16 +88,96 @@ public class Record implements Serializable {
         return "" + cell_x + cell_y;
     }
 
-    // Returns a string with all the record's info
-    public String toString(){
+    private String defineSea(double lon, double lat){
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        double latCapoFeto = 37.660618;
+        double lonCapoFeto = 12.521133;
 
-        return id + "," + type.name() + "," + cell + "," + formatter.format(ts) + "," + trip;
+        double latCapoBon = 37.083287;
+        double lonCapoBon = 11.038891;
+
+        if((lat>latCapoBon && lon<lonCapoBon) || (lon<lonCapoFeto && lat<latCapoBon) ||
+                (lon>lonCapoBon && lat<43.168196 && lat>latCapoBon && lon<16.177403) || (lat<latCapoFeto && lon<lonCapoFeto)){
+
+            return "Occidentale";
+
+        }else{
+
+            return "Orientale";
+        }
 
     }
 
-// Getters and Setters -------------------------------------------------------------------------------------------------
+    // Returns a string with all the record's info
+    public String toString(){
+
+        return id + "," + type.name() + "," + cell + "," + ts + "," + trip;
+
+    }
+
+    public static Record parseFromValue(NiFiDataPacket value) {
+
+        Record record = null;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+
+        String file = new String(value.getContent(), Charset.defaultCharset());
+        String fileWithoutFirstRow = file.substring(file.indexOf("\n")+1);
+        String[] lines = fileWithoutFirstRow.split("\n"); // Splitting file by line
+
+        for (String l : lines) {
+            String[] temp = l.split(",");
+
+            double lon = Double.parseDouble(temp[2]);
+            double lat = Double.parseDouble(temp[3]);
+
+            try {
+
+                Date date = formatter.parse(temp[4]);
+                cal.setTime(date);
+                String time = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
+
+                record = new Record(time, temp[0], Integer.parseInt(temp[1]), lon, lat, date, temp[5]);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return record;
+    }
+
+    public static boolean filterByHours(Record record, String limit1, String limit2){
+
+        String[] ore_minuti = record.getOre().split(":");
+        Calendar cal1 = Calendar.getInstance();
+        cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ore_minuti[0]));
+        cal1.set(Calendar.MINUTE, Integer.parseInt(ore_minuti[1]));
+
+        String[] ore = limit1.split(":");
+        Calendar cal2 = Calendar.getInstance();
+        cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ore[0]));
+        cal2.set(Calendar.MINUTE, Integer.parseInt(ore[1]));
+
+        String[] ore2 = limit2.split(":");
+        Calendar cal3 = Calendar.getInstance();
+        cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ore2[0]));
+        cal3.set(Calendar.MINUTE, Integer.parseInt(ore2[1]));
+
+        if(cal1.after(cal2) && cal1.before(cal3)){
+            return true;
+        }
+        return false;
+    }
+
+    public static String valueToString(Record record){
+        return record.getOre() + "," + record.getId() + "," + record.getType() + "," + record.getTrip() + "," + record.getTs() + ","
+                + record.getCell() + "," + record.getLon() + "," + record.getLat() +  "-----------------" + record.getTypeSea();
+    }
+
+
+    //Getters and Setters ----------------------------------------------------------------------------------------------
 
     public String getId() {
         return id;
@@ -104,18 +207,33 @@ public class Record implements Serializable {
         return ts;
     }
 
-    public void setTs(Date ts) {
-        this.ts = ts;
+    public void setTs(Date ts) { this.ts = ts; }
+
+    public String getTrip() { return trip; }
+
+    public void setTrip(String trip) { this.trip = trip; }
+
+    public String getOre() { return ore; }
+
+    public void setOre(String ore) { this.ore = ore; }
+
+    public String getTypeSea() { return typeSea; }
+
+    public void setTypeSea(String typeSea) { this.typeSea = typeSea; }
+
+    public double getLon() {
+        return lon;
     }
 
-    public String getTrip() {
-        return trip;
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
-    public void setTrip(String trip) {
-        this.trip = trip;
+    public double getLat() {
+        return lat;
     }
 
-// ---------------------------------------------------------------------------------------------------------------------
-
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
 }
