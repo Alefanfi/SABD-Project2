@@ -3,7 +3,7 @@
 if [[ $1 -eq 1 ]]
 then
   echo "Submitting query 1 to flink"
-  docker exec -t -i jobmanager flink run -c "queries.Query1" ./queries/SABD-Project2-1.0-SNAPSHOT-jar-with-dependencies.jar
+  docker exec -t -i jobmanager flink run -c "queries.query1.Query1" ./queries/SABD-Project2-1.0-SNAPSHOT-jar-with-dependencies.jar
 elif [[ $1 -eq 2 ]]
 then
   echo "Submitting query 2 to flink"

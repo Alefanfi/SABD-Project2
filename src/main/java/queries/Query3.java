@@ -1,11 +1,14 @@
 package queries;
 
+import flatmap.FlatMapRecord;
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.connectors.nifi.NiFiDataPacket;
 import org.apache.flink.streaming.connectors.nifi.NiFiSource;
 import org.apache.nifi.remote.client.SiteToSiteClient;
 import org.apache.nifi.remote.client.SiteToSiteClientConfig;
+import pojo.Record;
 
 public class Query3 {
 
@@ -23,7 +26,10 @@ public class Query3 {
 
         SourceFunction<NiFiDataPacket> nifiSource = new NiFiSource(clientConfig);
 
-
+        DataStream<Record> data = streamExecEnv
+                .addSource(nifiSource)
+                .flatMap(new FlatMapRecord())
+                .returns(Record.class);
 
 
     }
