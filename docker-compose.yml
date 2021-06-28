@@ -71,9 +71,6 @@ services:
       - V1_AUTH_PASSWORD=metrics123
     volumes:
       - ./influxdb/scripts:/docker-entrypoint-initdb.d
-      #- influxdb_volume:/var/lib/influxdb
 
 volumes:
   nifi_volume:
-  #influxdb_volume:
-    #driver: local

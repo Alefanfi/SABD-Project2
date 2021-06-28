@@ -32,6 +32,7 @@ public class Record implements Serializable {
         this.cell = this.defineCellId(lon, lat);
         this.ts = ts;
         this.trip = trip;
+        this.typeSea = defineSea(lon,lat);
 
     }
 
