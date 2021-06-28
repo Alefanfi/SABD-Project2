@@ -1,5 +1,6 @@
 package pojo;
 
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.connectors.nifi.NiFiDataPacket;
 
 import java.io.Serializable;
@@ -25,6 +26,10 @@ public class Record implements Serializable {
     private double lon;
     private double lat;
 
+    private long timestampDate;
+
+    private Tuple2<String, String> info;
+
     public Record(String id, int type, double lon, double lat, Date ts, String trip) {
 
         this.id = id;
@@ -40,14 +45,18 @@ public class Record implements Serializable {
 
         this.ore = ore;
         this.id = id;
-        this.type = defineShipType(type);
+        this.type = this.defineShipType(type);
         this.lon = lon;
         this.lat = lat;
         this.cell = this.defineCellId(lon, lat);
         this.ts = ts;
         this.trip = trip;
         this.typeSea = this.defineSea(lon, lat);
+        this.timestampDate = ts.getTime();
+        this.info = new Tuple2<>(this.defineCellId(lon, lat), this.defineSea(lon, lat));
     }
+
+    public Record(){}
 
     /*
     Returns the ship's type:
@@ -56,7 +65,7 @@ public class Record implements Serializable {
             CARGO = 70-79
             OTHER
      */
-    private static Shiptype defineShipType(int type){
+    private Shiptype defineShipType(int type){
 
         if(type == 35){
             return Shiptype.MILITARY;
@@ -112,7 +121,7 @@ public class Record implements Serializable {
     // Returns a string with all the record's info
     public String toString(){
 
-        return id + "," + type.name() + "," + cell + "," + ts + "," + trip;
+        return id + "," + type.name() + "," + cell + "," + ts + "," + trip + "," + typeSea;
 
     }
 
@@ -149,7 +158,7 @@ public class Record implements Serializable {
         return record;
     }
 
-    public static boolean filterByHours(Record record, String limit1, String limit2){
+    /*public static boolean filterByHours(Record record, String limit1, String limit2){
 
         String[] ore_minuti = record.getOre().split(":");
         Calendar cal1 = Calendar.getInstance();
@@ -170,11 +179,17 @@ public class Record implements Serializable {
             return true;
         }
         return false;
-    }
+    }*/
 
     public static String valueToString(Record record){
-        return record.getOre() + "," + record.getId() + "," + record.getType() + "," + record.getTrip() + "," + record.getTs() + ","
-                + record.getCell() + "," + record.getLon() + "," + record.getLat() +  "-----------------" + record.getTypeSea();
+        return record.getOre() + "," + record.getId() + "," + record.getType() + "," + record.getTrip() + "," + record.getTs() + "," +
+                record.getTimestampDate() + "," + record.getCell() + "," + record.getLon() + "," + record.getLat() +  "-----------------" + record.getTypeSea();
+    }
+
+    public int getHourInDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(ts);
+        return calendar.get(Calendar.HOUR_OF_DAY);
     }
 
 
@@ -237,4 +252,17 @@ public class Record implements Serializable {
     public void setLat(double lat) {
         this.lat = lat;
     }
+
+    public long getTimestampDate() { return timestampDate; }
+
+    public void setTimestampDate(long timestampDate) { this.timestampDate = timestampDate; }
+
+    public Tuple2<String, String> getInfo() {
+        return info;
+    }
+
+    public void setInfo(Tuple2<String, String> info) {
+        this.info = info;
+    }
+
 }
