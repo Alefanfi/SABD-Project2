@@ -10,17 +10,17 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordWindowFunction extends ProcessAllWindowFunction<Tuple2<String, Tuple2<Integer,Integer>>, String, TimeWindow>{
+public class RecordWindowFunction extends ProcessAllWindowFunction<Tuple2<Tuple2<String, String>, Tuple2<Integer,Integer>>, String, TimeWindow>{
 
     @Override
-    public void process(Context context, Iterable<Tuple2<String, Tuple2<Integer, Integer>>> iterable, Collector<String> collector) throws Exception {
-        List<Tuple2<String, Integer>> listAM = new ArrayList<>();
-        List<Tuple2<String, Integer>> listPM = new ArrayList<>();
+    public void process(Context context, Iterable<Tuple2<Tuple2<String, String>, Tuple2<Integer, Integer>>> iterable, Collector<String> collector) throws Exception {
+        List<Tuple2<Tuple2<String, String>, Integer>> listAM = new ArrayList<>();
+        List<Tuple2<Tuple2<String, String>, Integer>> listPM = new ArrayList<>();
 
-        for(Tuple2<String, Tuple2<Integer,Integer>> t : iterable){
+        for(Tuple2<Tuple2<String, String>, Tuple2<Integer,Integer>> t : iterable){
 
-            listAM.add(new Tuple2<>(t.f0,t.f1.f0));
-            listPM.add(new Tuple2<>(t.f0,t.f1.f1));
+            listAM.add(new Tuple2<>(new Tuple2<>(t.f0.f0, t.f0.f1), t.f1.f0));
+            listPM.add(new Tuple2<>(new Tuple2<>(t.f0.f0, t.f0.f1),t.f1.f1));
 
         }
 
@@ -30,7 +30,6 @@ public class RecordWindowFunction extends ProcessAllWindowFunction<Tuple2<String
         LocalDateTime startDate = LocalDateTime.ofEpochSecond(
                 context.window().getStart() / 1000, 0, ZoneOffset.UTC);
         StringBuilder result = new StringBuilder(String.valueOf(startDate));
-        //StringBuilder result = new StringBuilder(Long.toString(context.window().getStart() /1000));
 
         int sizeAM = listAM.size();
         int sizePM = listPM.size();

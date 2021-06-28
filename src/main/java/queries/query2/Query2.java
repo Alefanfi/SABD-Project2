@@ -17,7 +17,6 @@ import org.apache.nifi.remote.client.SiteToSiteClientConfig;
 import pojo.Record;
 
 import java.time.Duration;
-import java.util.Date;
 import java.util.HashMap;
 
 public class Query2 {
@@ -44,7 +43,7 @@ public class Query2 {
         SinkFunction<String> nifiSink = new NiFiSink<>(
                 clientConfig2, (NiFiDataPacketBuilder<String>) (s, ctx) -> new StandardNiFiDataPacket(s.getBytes(), new HashMap<>()));
 
-        KeyedStream<Record, String> stream = streamExecEnv
+        KeyedStream<Record, Tuple2<String, String>> stream = streamExecEnv
                 .addSource(nifiSource)
                 .map(Record::parseFromValue)
                 .returns(Record.class)
@@ -52,7 +51,7 @@ public class Query2 {
                         WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                                 .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
                 )
-                .keyBy(Record::getCell); //Grouping by cell id
+                .keyBy(Record::getInfo); //Grouping by cell id, sea type
 
         DataStreamSink<String> weekStream = stream
                 .window(TumblingEventTimeWindows.of(Time.days(7)))
@@ -60,22 +59,6 @@ public class Query2 {
                 .windowAll(TumblingEventTimeWindows.of(Time.days(7)))
                 .process(new RecordWindowFunction())
                 .print();
-
-
-        /*DataStream<Record> originalStream = streamExecEnv
-                .addSource(nifiSource)
-                .map(Record::parseFromValue);
-
-        DataStream<Record> withTimestampsAndWatermarks = originalStream
-                .assignTimestampsAndWatermarks(
-                        WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
-                                .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
-                );
-
-        withTimestampsAndWatermarks.keyBy(Record::getInfo)
-                .window(TumblingEventTimeWindows.of(Time.days(7))) //finestra per una settimana
-                .aggregate(new RecordAggregator(), new RecordProcessWindowFunction());
-        */
 
         streamExecEnv.execute("Query 2");
     }
