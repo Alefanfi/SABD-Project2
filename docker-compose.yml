@@ -72,5 +72,20 @@ services:
     volumes:
       - ./influxdb/scripts:/docker-entrypoint-initdb.d
 
+# REDIS ----------------------------------------------------------------------------------------------------------------
+
+  redis:
+    image: docker.io/bitnami/redis:6.2
+    container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/bitnami/redis/data
+
+# ----------------------------------------------------------------------------------------------------------------------
 volumes:
+  redis_data:
   nifi_volume:

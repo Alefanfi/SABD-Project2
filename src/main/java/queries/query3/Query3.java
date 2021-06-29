@@ -1,4 +1,4 @@
-package queries;
+package queries.query3;
 
 import flatmap.FlatMapRecord;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -12,7 +12,7 @@ import pojo.Record;
 
 public class Query3 {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
 
         StreamExecutionEnvironment streamExecEnv = StreamExecutionEnvironment
                 .getExecutionEnvironment();
@@ -32,5 +32,6 @@ public class Query3 {
                 .returns(Record.class);
 
 
+        streamExecEnv.execute("Query 3");
     }
 }

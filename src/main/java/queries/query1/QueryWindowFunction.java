@@ -13,7 +13,7 @@ public class QueryWindowFunction extends ProcessWindowFunction<Record, String, S
     SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
 
     @Override
-    public void process(String s, Context context, Iterable<Record> iterable, Collector<String> collector) throws Exception {
+    public void process(String s, Context context, Iterable<Record> iterable, Collector<String> collector) {
 
         int ship_military = 0;
         int ship_passenger = 0;
@@ -44,7 +44,10 @@ public class QueryWindowFunction extends ProcessWindowFunction<Record, String, S
             }
         }
 
-        out = formatter.format(ts) + "," + s + ",ship_t35," + ship_military/7.0 + ",ship_t60-69," + ship_passenger/7.0 + ",ship_t70-79," + ship_cargo/7.0 + ",ship_to," + ship_other/7.0;
+        out = formatter.format(ts) + "," + s + ",ship_t35," + String.format("%.3f", ship_military/7.0)
+                + ",ship_t60-69," + String.format("%.3f", ship_passenger/7.0)
+                + ",ship_t70-79," + String.format("%.3f", ship_cargo/7.0)
+                + ",ship_to," + String.format("%.3f", ship_other/7.0);
 
         collector.collect(out);
 

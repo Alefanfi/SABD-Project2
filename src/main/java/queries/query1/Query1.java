@@ -11,9 +11,12 @@ import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.nifi.*;
+import org.apache.flink.streaming.connectors.redis.RedisSink;
+import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 import org.apache.nifi.remote.client.SiteToSiteClient;
 import org.apache.nifi.remote.client.SiteToSiteClientConfig;
 import pojo.Record;
+import sink.MyRedisMapper;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -35,6 +38,7 @@ public class Query1 {
         SourceFunction<NiFiDataPacket> nifiSource = new NiFiSource(clientConfig);
 
         // Nifi sink
+        /*
         SiteToSiteClientConfig clientConfig2 = new SiteToSiteClient.Builder()
                 .url("http://nifi:8080/nifi")
                 .portName("results")
@@ -42,6 +46,10 @@ public class Query1 {
                 .buildConfig();
 
         SinkFunction<String> nifiSink = new NiFiSink<>(clientConfig2, (NiFiDataPacketBuilder<String>) (s, ctx) -> new StandardNiFiDataPacket(s.getBytes(), new HashMap<>()));
+         */
+
+        // Redis sink
+        FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost("redis").setPort(6379).build();
 
 
 
@@ -60,13 +68,12 @@ public class Query1 {
         cell_data
                 .window(TumblingEventTimeWindows.of(Time.days(7))) // Window with 7 days size
                 .process(new QueryWindowFunction())
-                .addSink(nifiSink);
+                .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_week")));
 
         cell_data
                 .window(new MonthAssigner()) // Window with 1 month size
                 .process(new QueryWindowFunction())
-                .addSink(nifiSink);
-
+                .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_month")));
 
         streamExecEnv.execute("Query 1");
     }
