@@ -1,14 +1,13 @@
 package queries.query2;
 
+import assigner.MonthAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.streaming.api.datastream.DataStreamSink;
+import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.connectors.nifi.*;
@@ -25,6 +24,7 @@ public class Query2 {
 
         StreamExecutionEnvironment streamExecEnv = StreamExecutionEnvironment.getExecutionEnvironment();
 
+        //Nifi Source
         SiteToSiteClientConfig clientConfig = new SiteToSiteClient
                 .Builder()
                 .url("http://nifi:8080/nifi")
@@ -34,6 +34,7 @@ public class Query2 {
 
         SourceFunction<NiFiDataPacket> nifiSource = new NiFiSource(clientConfig);
 
+        //Nifi Sink
         SiteToSiteClientConfig clientConfig2 = new SiteToSiteClient.Builder()
                 .url("http://nifi:8080/nifi")
                 .portName("results")
@@ -43,7 +44,56 @@ public class Query2 {
         SinkFunction<String> nifiSink = new NiFiSink<>(
                 clientConfig2, (NiFiDataPacketBuilder<String>) (s, ctx) -> new StandardNiFiDataPacket(s.getBytes(), new HashMap<>()));
 
-        KeyedStream<Record, Tuple2<String, String>> stream = streamExecEnv
+        SingleOutputStreamOperator<Record> stream = streamExecEnv
+                .addSource(nifiSource)
+                .map(Record::parseFromValue)
+                .returns(Record.class);
+
+        KeyedStream<Record, String> streamOccidentale = stream
+                .filter((FilterFunction<Record>) record -> record.getTypeSea().compareTo("Occidentale") == 0) // Keeping only records of Mar Mediterraneo Occidentale
+                .assignTimestampsAndWatermarks(
+                        WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
+                                .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
+                )
+                .keyBy(Record::getCell); //Grouping by cell id
+
+        streamOccidentale //weekStreamOccidentale
+                .window(TumblingEventTimeWindows.of(Time.days(7)))
+                .aggregate(new CountAggregator(), new KeyBinder())
+                .windowAll(TumblingEventTimeWindows.of(Time.days(7)))
+                .process(new RecordWindowFunction())
+                .addSink(nifiSink);
+
+        streamOccidentale //monthStreamOccidentale
+                .window(new MonthAssigner()) // Window with 1 month size
+                .aggregate(new CountAggregator(), new KeyBinder())
+                .windowAll(new MonthAssigner())
+                .process(new RecordWindowFunction())
+                .addSink(nifiSink);
+
+        KeyedStream<Record, String> streamOrientale = stream
+                .filter((FilterFunction<Record>) record -> record.getTypeSea().compareTo("Orientale") == 0) // Keeping only records of Mar Mediterraneo Orientale
+                .assignTimestampsAndWatermarks(
+                        WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
+                                .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
+                )
+                .keyBy(Record::getCell); //Grouping by cell id
+
+        streamOrientale //weekStreamOrientale
+                .window(TumblingEventTimeWindows.of(Time.days(7)))
+                .aggregate(new CountAggregator(), new KeyBinder())
+                .windowAll(TumblingEventTimeWindows.of(Time.days(7)))
+                .process(new RecordWindowFunction())
+                .addSink(nifiSink);
+
+        streamOrientale  //monthStreamOrientale
+                .window(new MonthAssigner()) // Window with 1 month size
+                .aggregate(new CountAggregator(), new KeyBinder())
+                .windowAll(new MonthAssigner())
+                .process(new RecordWindowFunction())
+                .addSink(nifiSink);
+
+        /*KeyedStream<Record, Tuple2<String, String>> stream = streamExecEnv
                 .addSource(nifiSource)
                 .map(Record::parseFromValue)
                 .returns(Record.class)
@@ -58,7 +108,7 @@ public class Query2 {
                 .aggregate(new CountAggregator(), new KeyBinder())
                 .windowAll(TumblingEventTimeWindows.of(Time.days(7)))
                 .process(new RecordWindowFunction())
-                .print();
+                .print();*/
 
         streamExecEnv.execute("Query 2");
     }
