@@ -56,7 +56,7 @@ public class Query2 {
                         WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                                 .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
                 )
-                .keyBy(Record::getInfo); //Grouping by cell id
+                .keyBy(Record::getInfo); //Grouping by cell id, type sea
 
         streamOccidentale //weekStreamOccidentale
                 .window(TumblingEventTimeWindows.of(Time.days(7)))
@@ -78,7 +78,7 @@ public class Query2 {
                         WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                                 .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
                 )
-                .keyBy(Record::getInfo); //Grouping by cell id
+                .keyBy(Record::getInfo); //Grouping by cell id, type sea
 
         streamOrientale //weekStreamOrientale
                 .window(TumblingEventTimeWindows.of(Time.days(7)))
