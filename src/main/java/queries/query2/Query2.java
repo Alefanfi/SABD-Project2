@@ -3,6 +3,7 @@ package queries.query2;
 import assigner.MonthAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.FilterFunction;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
@@ -49,13 +50,13 @@ public class Query2 {
                 .map(Record::parseFromValue)
                 .returns(Record.class);
 
-        KeyedStream<Record, String> streamOccidentale = stream
+        KeyedStream<Record, Tuple2<String, String>> streamOccidentale = stream
                 .filter((FilterFunction<Record>) record -> record.getTypeSea().compareTo("Occidentale") == 0) // Keeping only records of Mar Mediterraneo Occidentale
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                                 .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
                 )
-                .keyBy(Record::getCell); //Grouping by cell id
+                .keyBy(Record::getInfo); //Grouping by cell id
 
         streamOccidentale //weekStreamOccidentale
                 .window(TumblingEventTimeWindows.of(Time.days(7)))
@@ -71,13 +72,13 @@ public class Query2 {
                 .process(new RecordWindowFunction())
                 .addSink(nifiSink);
 
-        KeyedStream<Record, String> streamOrientale = stream
+        KeyedStream<Record, Tuple2<String, String>> streamOrientale = stream
                 .filter((FilterFunction<Record>) record -> record.getTypeSea().compareTo("Orientale") == 0) // Keeping only records of Mar Mediterraneo Orientale
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                                 .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
                 )
-                .keyBy(Record::getCell); //Grouping by cell id
+                .keyBy(Record::getInfo); //Grouping by cell id
 
         streamOrientale //weekStreamOrientale
                 .window(TumblingEventTimeWindows.of(Time.days(7)))

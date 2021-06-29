@@ -28,7 +28,7 @@ public class Record implements Serializable {
 
     private long timestampDate;
 
-    private Tuple2<String, String> info;
+    private Tuple2<String, String> info; //cell_id, typeSea
 
     public Record(String id, int type, double lon, double lat, Date ts, String trip) {
 
@@ -46,8 +46,6 @@ public class Record implements Serializable {
         this.ore = ore;
         this.id = id;
         this.type = this.defineShipType(type);
-        this.lon = lon;
-        this.lat = lat;
         this.cell = this.defineCellId(lon, lat);
         this.ts = ts;
         this.trip = trip;
@@ -158,40 +156,10 @@ public class Record implements Serializable {
         return record;
     }
 
-    /*public static boolean filterByHours(Record record, String limit1, String limit2){
-
-        String[] ore_minuti = record.getOre().split(":");
-        Calendar cal1 = Calendar.getInstance();
-        cal1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ore_minuti[0]));
-        cal1.set(Calendar.MINUTE, Integer.parseInt(ore_minuti[1]));
-
-        String[] ore = limit1.split(":");
-        Calendar cal2 = Calendar.getInstance();
-        cal2.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ore[0]));
-        cal2.set(Calendar.MINUTE, Integer.parseInt(ore[1]));
-
-        String[] ore2 = limit2.split(":");
-        Calendar cal3 = Calendar.getInstance();
-        cal3.set(Calendar.HOUR_OF_DAY, Integer.parseInt(ore2[0]));
-        cal3.set(Calendar.MINUTE, Integer.parseInt(ore2[1]));
-
-        if(cal1.after(cal2) && cal1.before(cal3)){
-            return true;
-        }
-        return false;
-    }*/
-
     public static String valueToString(Record record){
         return record.getOre() + "," + record.getId() + "," + record.getType() + "," + record.getTrip() + "," + record.getTs() + "," +
                 record.getTimestampDate() + "," + record.getCell() + "," + record.getLon() + "," + record.getLat() +  "-----------------" + record.getTypeSea();
     }
-
-    public int getHourInDate(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(ts);
-        return calendar.get(Calendar.HOUR_OF_DAY);
-    }
-
 
     //Getters and Setters ----------------------------------------------------------------------------------------------
 
