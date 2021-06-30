@@ -51,7 +51,7 @@ public class Query2 {
                 .returns(Record.class);
 
         KeyedStream<Record, Tuple2<String, String>> streamOccidentale = stream
-                .filter((FilterFunction<Record>) record -> record.getTypeSea().compareTo("Occidentale") == 0) // Keeping only records of Mar Mediterraneo Occidentale
+                .filter((FilterFunction<Record>) record -> record.getSeaType().compareTo("Occidentale") == 0) // Keeping only records of Mar Mediterraneo Occidentale
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                                 .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
@@ -73,7 +73,7 @@ public class Query2 {
                 .addSink(nifiSink);
 
         KeyedStream<Record, Tuple2<String, String>> streamOrientale = stream
-                .filter((FilterFunction<Record>) record -> record.getTypeSea().compareTo("Orientale") == 0) // Keeping only records of Mar Mediterraneo Orientale
+                .filter((FilterFunction<Record>) record -> record.getSeaType().compareTo("Orientale") == 0) // Keeping only records of Mar Mediterraneo Orientale
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                                 .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())

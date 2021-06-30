@@ -14,7 +14,7 @@ public class MyRedisMapper implements RedisMapper<String> {
 
     @Override
     public RedisCommandDescription getCommandDescription() {
-        return new RedisCommandDescription(RedisCommand.RPUSH, null);
+        return new RedisCommandDescription(RedisCommand.LPUSH, null);
     }
 
     @Override

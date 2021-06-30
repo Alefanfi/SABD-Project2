@@ -14,30 +14,30 @@ public class Record implements Serializable {
 
     public enum Shiptype { MILITARY, PASSENGER, CARGO, OTHER }
 
-    private String id;      // ship id
-    private Shiptype type;  // ship type
-    private String cell;    // cell id
-    private Date ts;      // timestamp
-    private String trip;    // trip id
+    private String id;          // ship id
+    private Shiptype shipType;  // ship type
+    private double lon;         // longitude
+    private double lat;         // latitude
+    private String cell;        // cell id
+    private Date ts;            // timestamp
+    private String trip;        // trip id
+    private String seaType;     // sea type
+
+
     private String ore;     //ore
-
-    private String typeSea; //tipo di mare
-
-    private double lon;
-    private double lat;
-
     private long timestampDate;
-
     private Tuple2<String, String> info; //cell_id, typeSea
 
     public Record(String id, int type, double lon, double lat, Date ts, String trip) {
 
         this.id = id;
-        this.type = this.defineShipType(type);
+        this.shipType = this.defineShipType(type);
+        this.lon = lon;
+        this.lat = lat;
         this.cell = this.defineCellId(lon, lat);
         this.ts = ts;
         this.trip = trip;
-        this.typeSea = defineSea(lon,lat);
+        this.seaType = defineSea(lon,lat);
 
     }
 
@@ -45,11 +45,11 @@ public class Record implements Serializable {
 
         this.ore = ore;
         this.id = id;
-        this.type = this.defineShipType(type);
+        this.shipType = this.defineShipType(type);
         this.cell = this.defineCellId(lon, lat);
         this.ts = ts;
         this.trip = trip;
-        this.typeSea = this.defineSea(lon, lat);
+        this.seaType = this.defineSea(lon, lat);
         this.timestampDate = ts.getTime();
         this.info = new Tuple2<>(this.defineCellId(lon, lat), this.defineSea(lon, lat));
     }
@@ -79,7 +79,7 @@ public class Record implements Serializable {
         }
     }
 
-
+    // Returns the cell's id calculated using longitude and latitude
     private String defineCellId(double lon, double lat){
 
         double minlat = 32.0;
@@ -96,6 +96,7 @@ public class Record implements Serializable {
         return "" + cell_x + cell_y;
     }
 
+    // Returns the sea type, either western or eastern mediterranean
     private String defineSea(double lon, double lat){
 
         double latCapoFeto = 37.660618;
@@ -119,7 +120,7 @@ public class Record implements Serializable {
     // Returns a string with all the record's info
     public String toString(){
 
-        return id + "," + type.name() + "," + cell + "," + ts + "," + trip + "," + typeSea;
+        return id + "," + shipType.name() + "," + cell + "," + ts + "," + trip + "," + seaType;
 
     }
 
@@ -157,8 +158,8 @@ public class Record implements Serializable {
     }
 
     public static String valueToString(Record record){
-        return record.getOre() + "," + record.getId() + "," + record.getType() + "," + record.getTrip() + "," + record.getTs() + "," +
-                record.getTimestampDate() + "," + record.getCell() + "," + record.getLon() + "," + record.getLat() +  "-----------------" + record.getTypeSea();
+        return record.getOre() + "," + record.getId() + "," + record.getShipType() + "," + record.getTrip() + "," + record.getTs() + "," +
+                record.getTimestampDate() + "," + record.getCell() + "," + record.getLon() + "," + record.getLat() +  "-----------------" + record.getSeaType();
     }
 
     //Getters and Setters ----------------------------------------------------------------------------------------------
@@ -167,70 +168,36 @@ public class Record implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Shiptype getType() {
-        return type;
-    }
-
-    public void setType(Shiptype type) {
-        this.type = type;
+    public Shiptype getShipType() {
+        return shipType;
     }
 
     public String getCell() {
         return cell;
     }
 
-    public void setCell(String cell) {
-        this.cell = cell;
-    }
-
     public Date getTs() {
         return ts;
     }
 
-    public void setTs(Date ts) { this.ts = ts; }
-
     public String getTrip() { return trip; }
-
-    public void setTrip(String trip) { this.trip = trip; }
 
     public String getOre() { return ore; }
 
-    public void setOre(String ore) { this.ore = ore; }
-
-    public String getTypeSea() { return typeSea; }
-
-    public void setTypeSea(String typeSea) { this.typeSea = typeSea; }
+    public String getSeaType() { return seaType; }
 
     public double getLon() {
         return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
     }
 
     public double getLat() {
         return lat;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
     public long getTimestampDate() { return timestampDate; }
-
-    public void setTimestampDate(long timestampDate) { this.timestampDate = timestampDate; }
 
     public Tuple2<String, String> getInfo() {
         return info;
-    }
-
-    public void setInfo(Tuple2<String, String> info) {
-        this.info = info;
     }
 
 }
