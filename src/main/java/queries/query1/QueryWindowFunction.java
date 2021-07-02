@@ -30,13 +30,13 @@ public class QueryWindowFunction extends ProcessWindowFunction<Record, String, S
                 ts = r.getTs();
             }
 
-            if(r.getType().compareTo(Record.Shiptype.MILITARY) == 0){
+            if(r.getShipType().compareTo(Record.Shiptype.MILITARY) == 0){
                 ship_military++;
             }
-            if(r.getType().compareTo(Record.Shiptype.PASSENGER) == 0){
+            if(r.getShipType().compareTo(Record.Shiptype.PASSENGER) == 0){
                 ship_passenger++;
             }
-            if(r.getType().compareTo(Record.Shiptype.CARGO) == 0){
+            if(r.getShipType().compareTo(Record.Shiptype.CARGO) == 0){
                 ship_cargo++;
             }
             else{
@@ -44,6 +44,7 @@ public class QueryWindowFunction extends ProcessWindowFunction<Record, String, S
             }
         }
 
+        // Returns a string with mean number of ships of each type
         out = formatter.format(ts) + "," + s + ",ship_t35," + String.format("%.3f", ship_military/7.0)
                 + ",ship_t60-69," + String.format("%.3f", ship_passenger/7.0)
                 + ",ship_t70-79," + String.format("%.3f", ship_cargo/7.0)

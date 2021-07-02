@@ -13,10 +13,14 @@ import java.util.Date;
 
 public class FlatMapRecord implements FlatMapFunction<NiFiDataPacket, Record> {
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
+    private SimpleDateFormat formatter;
+
+    public FlatMapRecord(SimpleDateFormat formatter){
+        this.formatter = formatter;
+    }
 
     @Override
-    public void flatMap(NiFiDataPacket value, Collector<Record> out) throws Exception {
+    public void flatMap(NiFiDataPacket value, Collector<Record> out) {
 
         String file = new String(value.getContent(), Charset.defaultCharset());
         file = file.substring(file.indexOf("\n")+1); // Remove header
