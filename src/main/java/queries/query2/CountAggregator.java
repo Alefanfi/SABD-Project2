@@ -36,3 +36,9 @@ public class CountAggregator implements AggregateFunction<Record, Count, Tuple2<
         return count;
     }
 }
+
+class Count{
+    public String trip;
+    public Integer countAM=0;
+    public Integer countPM=0;
+}
