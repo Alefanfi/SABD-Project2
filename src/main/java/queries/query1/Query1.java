@@ -2,6 +2,7 @@ package queries.query1;
 
 import assigner.MonthAssigner;
 import flatmap.FlatMapRecord;
+import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.eventtime.*;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
@@ -19,6 +20,7 @@ import sink.MyRedisMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public class Query1 {
 
@@ -62,7 +64,9 @@ public class Query1 {
                 .aggregate(new QueryAggregateFunction(), new QueryWindowFunction()) // Returns a string with (time_stamp, ship_t35 ,score_35, ... , ship_to, score_o)
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_month"))); // Add sink
 
-        streamExecEnv.execute("Query 1");
+        // execute program
+        JobExecutionResult result = streamExecEnv.execute("Query 1");;
+        System.out.println("The job took " + result.getNetRuntime(TimeUnit.SECONDS) + " to execute");
     }
 
 }

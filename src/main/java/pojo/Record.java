@@ -39,6 +39,8 @@ public class Record implements Serializable {
         this.ts = ts;
         this.trip = trip;
         this.seaType = defineSea(lon,lat);
+        this.ore = this.getHoursByDate(ts);
+        this.info = new Tuple2<>(this.defineCellId(lon, lat), this.defineSea(lon, lat));
 
     }
 
@@ -123,6 +125,16 @@ public class Record implements Serializable {
 
         return id + "," + shipType.name() + "," + cell + "," + ts + "," + trip + "," + seaType;
 
+    }
+
+    private String getHoursByDate(Date ts){
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.setTime(ts);
+        String time = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
+
+        return time;
     }
 
     public static Record parseFromValue(NiFiDataPacket value) {
