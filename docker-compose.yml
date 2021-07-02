@@ -14,18 +14,6 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        metrics.reporter.influxdb.factory.class: org.apache.flink.metrics.influxdb.InfluxdbReporterFactory
-        metrics.reporter.influxdb.scheme: http
-        metrics.reporter.influxdb.host: influxdb
-        metrics.reporter.influxdb.port: 8086
-        metrics.reporter.influxdb.db: flink
-        metrics.reporter.influxdb.username: metrics
-        metrics.reporter.influxdb.password: metrics123
-        metrics.reporter.influxdb.retentionPolicy: one_hour
-        metrics.reporter.influxdb.consistency: ANY
-        metrics.reporter.influxdb.connectTimeout: 60000
-        metrics.reporter.influxdb.writeTimeout: 60000
-        metrics.reporter.influxdb.interval: 60 SECONDS
     volumes:
       - ./target:/opt/flink/queries/
 
