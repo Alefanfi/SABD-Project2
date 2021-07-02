@@ -36,17 +36,6 @@ public class Query1 {
 
         SourceFunction<NiFiDataPacket> nifiSource = new NiFiSource(clientConfig);
 
-        // Nifi sink
-        /*
-        SiteToSiteClientConfig clientConfig2 = new SiteToSiteClient.Builder()
-                .url("http://nifi:8080/nifi")
-                .portName("results")
-                .requestBatchCount(5)
-                .buildConfig();
-
-        SinkFunction<String> nifiSink = new NiFiSink<>(clientConfig2, (NiFiDataPacketBuilder<String>) (s, ctx) -> new StandardNiFiDataPacket(s.getBytes(), new HashMap<>()));
-         */
-
         // Redis sink
         FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost("redis").setPort(6379).build();
 
@@ -64,13 +53,13 @@ public class Query1 {
 
 
         cell_data
-                .window(TumblingEventTimeWindows.of(Time.days(7))) // Window with 7 days size
-                .process(new QueryWindowFunction())
+                .window(TumblingEventTimeWindows.of(Time.days(7))) // 7 days window
+                .aggregate(new QueryAggregateFunction(), new QueryWindowFunction())
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_week"))); // Add sink
 
         cell_data
-                .window(new MonthAssigner()) // Window with 1 month size
-                .process(new QueryWindowFunction())
+                .window(new MonthAssigner()) // 1 month window
+                .aggregate(new QueryAggregateFunction(), new QueryWindowFunction())
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_month"))); // Add sink
 
         streamExecEnv.execute("Query 1");

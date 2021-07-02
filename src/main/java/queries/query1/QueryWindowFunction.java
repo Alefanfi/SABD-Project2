@@ -1,56 +1,27 @@
 package queries.query1;
 
+
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-import pojo.Record;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class QueryWindowFunction extends ProcessWindowFunction<Record, String, String, TimeWindow> {
+public class QueryWindowFunction extends ProcessWindowFunction<String, String, String, TimeWindow> {
 
     SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
 
     @Override
-    public void process(String s, Context context, Iterable<Record> iterable, Collector<String> collector) {
+    public void process(String s, Context context, Iterable<String> iterable, Collector<String> collector) {
 
-        int ship_military = 0;
-        int ship_passenger = 0;
-        int ship_cargo = 0;
-        int ship_other = 0;
+        String ts = formatter.format(new Date(context.window().getStart())); // Get timestamp from window
 
-        Date ts = new Date();
+        iterable.iterator().forEachRemaining(elem -> {
 
-        String out;
+            collector.collect(ts + elem); // Adding timestamp
 
-        for (Record r : iterable){
-
-            if(ts.after(r.getTs())){
-                ts = r.getTs();
-            }
-
-            if(r.getShipType().compareTo(Record.Shiptype.MILITARY) == 0){
-                ship_military++;
-            }
-            if(r.getShipType().compareTo(Record.Shiptype.PASSENGER) == 0){
-                ship_passenger++;
-            }
-            if(r.getShipType().compareTo(Record.Shiptype.CARGO) == 0){
-                ship_cargo++;
-            }
-            else{
-                ship_other++;
-            }
-        }
-
-        // Returns a string with mean number of ships of each type
-        out = formatter.format(ts) + "," + s + ",ship_t35," + String.format("%.3f", ship_military/7.0)
-                + ",ship_t60-69," + String.format("%.3f", ship_passenger/7.0)
-                + ",ship_t70-79," + String.format("%.3f", ship_cargo/7.0)
-                + ",ship_to," + String.format("%.3f", ship_other/7.0);
-
-        collector.collect(out);
+        });
 
     }
 }

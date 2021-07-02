@@ -47,30 +47,43 @@ services:
     image: apache/nifi
     container_name: nifi
     ports:
-      - '8080:8080' # Web ui port
+      - '9090:8080' # Web ui port
     volumes:
       - ./nifi:/nifi-conf/
       - nifi_volume:/opt/nifi/nifi-current/conf/
 
 # INFLUXDB -------------------------------------------------------------------------------------------------------------
 
-  influxdb:
-    image: influxdb:2.0
-    container_name: influxdb
+  #influxdb:
+    #image: influxdb:2.0
+    #container_name: influxdb
+    #ports:
+    #  - '8086:8086' # Web ui Port
+    #environment:
+    #  - DOCKER_INFLUXDB_INIT_MODE=setup
+    #  - DOCKER_INFLUXDB_INIT_USERNAME=admin
+    #  - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+    #  - DOCKER_INFLUXDB_INIT_ORG=my_org
+    #  - DOCKER_INFLUXDB_INIT_BUCKET=my_bucket
+    #  - V1_DB_NAME=flink
+    #  - V1_RP_NAME=one_hour
+    #  - V1_AUTH_USERNAME=metrics
+    #  - V1_AUTH_PASSWORD=metrics123
+    #volumes:
+    #  - ./influxdb/scripts:/docker-entrypoint-initdb.d
+
+# GRAPHITE -------------------------------------------------------------------------------------------------------------
+
+  graphite:
+    image: graphiteapp/graphite-statsd:latest
+    container_name: graphite
     ports:
-      - '8086:8086' # Web ui Port
-    environment:
-      - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=admin
-      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
-      - DOCKER_INFLUXDB_INIT_ORG=my_org
-      - DOCKER_INFLUXDB_INIT_BUCKET=my_bucket
-      - V1_DB_NAME=flink
-      - V1_RP_NAME=one_hour
-      - V1_AUTH_USERNAME=metrics
-      - V1_AUTH_PASSWORD=metrics123
-    volumes:
-      - ./influxdb/scripts:/docker-entrypoint-initdb.d
+      - '80:80'
+      - "8080:8080"
+      - "2003:2003"
+      - "2004:2004"
+      - "8125:8125/udp"
+      - "8126:8126"
 
 # REDIS ----------------------------------------------------------------------------------------------------------------
 
@@ -85,7 +98,18 @@ services:
     volumes:
       - redis_data:/bitnami/redis/data
 
+# GRAFANA --------------------------------------------------------------------------------------------------------------
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_INSTALL_PLUGINS=redis-datasource
+    ports:
+      - '3000:3000'
+
 # ----------------------------------------------------------------------------------------------------------------------
+
 volumes:
   redis_data:
   nifi_volume:

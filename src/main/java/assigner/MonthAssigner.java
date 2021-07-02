@@ -19,12 +19,21 @@ public class MonthAssigner extends TumblingEventTimeWindows{
     @Override
     public Collection<TimeWindow> assignWindows(Object o, long timestamp, WindowAssignerContext context){
 
+        Date date = new Date(timestamp);
+
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date(timestamp));
+        calendar.setTime(date);
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
         long start = calendar.getTimeInMillis();
 
         calendar.add(Calendar.MONTH,1);
+        calendar.add(Calendar.DAY_OF_MONTH, -1); // VEDERE SE FUNZIONA
 
         long end = calendar.getTimeInMillis();
 

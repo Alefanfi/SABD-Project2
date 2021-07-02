@@ -40,7 +40,7 @@ public class FlatMapRecord implements FlatMapFunction<NiFiDataPacket, Record> {
 
             Record r = new Record(elems[0], Integer.parseInt(elems[1]), Double.parseDouble(elems[2]), Double.parseDouble(elems[3]), date, elems[5]);
 
-            out.collect(r); // each record has : (ship_id, ship_type, cell_id, ts, trip_id)
+            out.collect(r); // each record has : (ship_id, ship_type, lon, lat, cell_id, ts, trip_id, sea_type)
 
         });
     }
