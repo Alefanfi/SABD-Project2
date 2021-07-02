@@ -1,7 +1,7 @@
 package queries.query1;
 
-import assigner.MonthAssigner;
-import flatmap.FlatMapRecord;
+import common.MonthAssigner;
+import common.FlatMapRecord;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.eventtime.*;
 import org.apache.flink.api.common.functions.FilterFunction;
@@ -15,8 +15,8 @@ import org.apache.flink.streaming.connectors.redis.RedisSink;
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 import org.apache.nifi.remote.client.SiteToSiteClient;
 import org.apache.nifi.remote.client.SiteToSiteClientConfig;
-import pojo.Record;
-import sink.MyRedisMapper;
+import common.Record;
+import common.MyRedisMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -46,7 +46,7 @@ public class Query1 {
                 .addSource(nifiSource) // Add source
                 .flatMap( new FlatMapRecord(new SimpleDateFormat("yy-MM-dd"))) // Generate new record with (ship_id, ship_type, cell_id, ts, trip_id, sea_type)
                 .returns(Record.class)
-                .filter((FilterFunction<Record>) record -> record.getSeaType().compareTo("Occidentale") == 0) // Keeping only records of Western Mediterranean
+                .filter((FilterFunction<Record>) record -> record.getSeaType().compareTo(Record.Seatype.WEST) == 0) // Keeping only records of Western Mediterranean
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofDays(1))
                         .withTimestampAssigner((record, timestamp) -> record.getTs().getTime()) // Assigning timestamps

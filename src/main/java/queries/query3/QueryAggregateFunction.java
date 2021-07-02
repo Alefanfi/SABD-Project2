@@ -1,7 +1,7 @@
 package queries.query3;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
-import pojo.Record;
+import common.Record;
 import scala.Tuple3;
 
 import java.text.ParseException;

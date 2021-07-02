@@ -641,12 +641,12 @@
             <id>16c3c4f3-83a9-3c60-0000-000000000000</id>
             <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
             <position>
-                <x>1216.0</x>
+                <x>1208.0</x>
                 <y>48.0</y>
             </position>
             <allowRemoteAccess>true</allowRemoteAccess>
             <comments></comments>
-            <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+            <concurrentlySchedulableTaskCount>3</concurrentlySchedulableTaskCount>
             <name>dataset</name>
             <state>STOPPED</state>
             <transmitting>false</transmitting>
@@ -1091,5 +1091,5 @@ ORDER BY TS</value>
             <type>org.apache.nifi.processors.standard.GetFile</type>
         </processors>
     </snippet>
-    <timestamp>06/18/2021 14:08:40 UTC</timestamp>
+    <timestamp>07/02/2021 18:21:25 UTC</timestamp>
 </template>

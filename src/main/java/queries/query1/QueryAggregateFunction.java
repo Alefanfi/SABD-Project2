@@ -1,7 +1,7 @@
 package queries.query1;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
-import pojo.Record;
+import common.Record;
 
 public class QueryAggregateFunction implements AggregateFunction<Record, QueryAccumulator, String> {
 

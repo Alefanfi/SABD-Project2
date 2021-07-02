@@ -1,6 +1,6 @@
 package queries.query3;
 
-import flatmap.FlatMapRecord;
+import common.FlatMapRecord;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -13,8 +13,8 @@ import org.apache.flink.streaming.connectors.redis.RedisSink;
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 import org.apache.nifi.remote.client.SiteToSiteClient;
 import org.apache.nifi.remote.client.SiteToSiteClientConfig;
-import pojo.Record;
-import sink.MyRedisMapper;
+import common.Record;
+import common.MyRedisMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;

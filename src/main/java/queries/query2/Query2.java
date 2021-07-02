@@ -1,25 +1,23 @@
 package queries.query2;
 
-import assigner.MonthAssigner;
-import flatmap.FlatMapRecord;
+import common.MonthAssigner;
+import common.FlatMapRecord;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.functions.FilterFunction;
-import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
+
 import org.apache.flink.streaming.connectors.nifi.*;
 import org.apache.flink.streaming.connectors.redis.RedisSink;
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 import org.apache.nifi.remote.client.SiteToSiteClient;
 import org.apache.nifi.remote.client.SiteToSiteClientConfig;
-import pojo.Record;
-import sink.MyRedisMapper;
+import common.Record;
+import common.MyRedisMapper;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 
 public class Query2 {
@@ -31,7 +29,7 @@ public class Query2 {
         // Nifi Source
         SiteToSiteClientConfig clientConfig = new SiteToSiteClient
                 .Builder()
-                .url("http://nifi:9090/nifi")
+                .url("http://nifi:8080/nifi")
                 .portName("dataset")
                 .requestBatchCount(5)
                 .buildConfig();
@@ -42,76 +40,33 @@ public class Query2 {
         FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost("redis").setPort(6379).build();
 
 
-        /*SingleOutputStreamOperator<Record> stream = streamExecEnv
-                .addSource(nifiSource)
-                .map(Record::parseFromValue)
-                .returns(Record.class);*/
-
-        SingleOutputStreamOperator<Record> stream = streamExecEnv
-                .addSource(nifiSource)
-                .flatMap(new FlatMapRecord(new SimpleDateFormat("yy-MM-dd HH:mm:ss")))
-                .returns(Record.class);
-
-        KeyedStream<Record, Tuple2<String, String>> streamOccidentale = stream
-                .filter((FilterFunction<Record>) record -> record.getSeaType().compareTo("Occidentale") == 0) // Keeping only records of Mar Mediterraneo Occidentale
-                .assignTimestampsAndWatermarks(
-                        WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
-                                .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
-                )
-                .keyBy(Record::getInfo); //Grouping by cell id, type sea
-
-        KeyedStream<Record, Tuple2<String, String>> streamOrientale = stream
-                .filter((FilterFunction<Record>) record -> record.getSeaType().compareTo("Orientale") == 0) // Keeping only records of Mar Mediterraneo Orientale
-                .assignTimestampsAndWatermarks(
-                        WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
-                                .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
-                )
-                .keyBy(Record::getInfo); //Grouping by cell id, type sea
-
-        streamOccidentale //weekStreamOccidentale
-                .window(TumblingEventTimeWindows.of(Time.hours(24*7)))
-                .aggregate(new CountAggregator(), new KeyBinder())
-                .windowAll(TumblingEventTimeWindows.of(Time.hours(24*7)))
-                .process(new RecordWindowFunction())
-                .addSink(new RedisSink<>(conf, new MyRedisMapper("query2_weekOccidentale")));
-
-        streamOccidentale //monthStreamOccidentale
-                .window(new MonthAssigner()) // Window with 1 month size
-                .aggregate(new CountAggregator(), new KeyBinder())
-                .windowAll(new MonthAssigner())
-                .process(new RecordWindowFunction())
-                .addSink(new RedisSink<>(conf, new MyRedisMapper("query2_monthOccidentale")));
-
-        streamOrientale //weekStreamOrientale
-                .window(TumblingEventTimeWindows.of(Time.hours(24*7)))
-                .aggregate(new CountAggregator(), new KeyBinder())
-                .windowAll(TumblingEventTimeWindows.of(Time.hours(24*7)))
-                .process(new RecordWindowFunction())
-                .addSink(new RedisSink<>(conf, new MyRedisMapper("query2_weekOrientale")));
-
-        streamOrientale  //monthStreamOrientale
-                .window(new MonthAssigner()) // Window with 1 month size
-                .aggregate(new CountAggregator(), new KeyBinder())
-                .windowAll(new MonthAssigner())
-                .process(new RecordWindowFunction())
-                .addSink(new RedisSink<>(conf, new MyRedisMapper("query2_monthOrientale")));
-
-        /*KeyedStream<Record, Tuple2<String, String>> stream = streamExecEnv
-                .addSource(nifiSource)
-                .map(Record::parseFromValue)
+        KeyedStream<Record, String> sea_data = streamExecEnv
+                .addSource(nifiSource) // Add source
+                .flatMap(new FlatMapRecord(new SimpleDateFormat("yy-MM-dd HH"))) // Generate new record with (ship_id, ship_type, cell_id, ts, trip_id, sea_type)
                 .returns(Record.class)
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofSeconds(1))
-                                .withTimestampAssigner((record, timestamp) -> record.getTs().getTime())
+                                .withTimestampAssigner((record, timestamp) -> record.getTs().getTime()) // Assigning timestamps
                 )
-                .keyBy(Record::getInfo); //Grouping by cell id, sea type
+                .keyBy(Record::getCell); // Grouping by cell_id
 
-        DataStreamSink<String> weekStream = stream
-                .window(TumblingEventTimeWindows.of(Time.days(7)))
-                .aggregate(new CountAggregator(), new KeyBinder())
-                .windowAll(TumblingEventTimeWindows.of(Time.days(7)))
-                .process(new RecordWindowFunction())
-                .print();*/
+
+        sea_data
+                .window(TumblingEventTimeWindows.of(Time.days(7))) // 7 day window
+                .aggregate(new QueryAggregateFunction()) // Calculates frequency for each cell both in am and pm slots , returns (sea_type, cell_id, count_am, count_pm)
+                .keyBy(t -> t.f0) // Grouping by sea_type
+                .window(TumblingEventTimeWindows.of(Time.days(7))) // 7 days window
+                .process(new QueryWindowFunction())
+                .addSink(new RedisSink<>(conf, new MyRedisMapper("query2_week"))); // Add sink
+
+        sea_data
+                .window(new MonthAssigner()) // 1 month window
+                .aggregate(new QueryAggregateFunction()) // Calculates frequency for each cell both in am and pm slots , returns (sea_type, cell_id, count_am, count_pm)
+                .keyBy(t -> t.f0) // Grouping by sea_type
+                .window(new MonthAssigner()) // 1 month window
+                .process(new QueryWindowFunction())
+                .addSink(new RedisSink<>(conf, new MyRedisMapper("query2_month"))); // Add sink
+
 
         streamExecEnv.execute("Query 2");
     }

@@ -1,9 +1,8 @@
-package flatmap;
+package common;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.streaming.connectors.nifi.NiFiDataPacket;
 import org.apache.flink.util.Collector;
-import pojo.Record;
 
 import java.nio.charset.Charset;
 import java.text.ParseException;
