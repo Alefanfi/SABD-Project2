@@ -6,7 +6,7 @@ import org.apache.flink.streaming.connectors.redis.common.mapper.RedisMapper;
 
 public class MyRedisMapper implements RedisMapper<String> {
 
-    private final String key;
+    private final String key; // List's key
 
     public MyRedisMapper(String key){
         this.key = key;
@@ -14,7 +14,7 @@ public class MyRedisMapper implements RedisMapper<String> {
 
     @Override
     public RedisCommandDescription getCommandDescription() {
-        return new RedisCommandDescription(RedisCommand.LPUSH, null);
+        return new RedisCommandDescription(RedisCommand.LPUSH, null); // Use LPUSH to add new value on top of the list
     }
 
     @Override

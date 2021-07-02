@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class FlatMapRecord implements FlatMapFunction<NiFiDataPacket, Record> {
 
-    private SimpleDateFormat formatter;
+    private final SimpleDateFormat formatter;
 
     public FlatMapRecord(SimpleDateFormat formatter){
         this.formatter = formatter;

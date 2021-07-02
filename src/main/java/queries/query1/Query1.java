@@ -42,7 +42,7 @@ public class Query1 {
 
         KeyedStream<Record, String> cell_data = streamExecEnv
                 .addSource(nifiSource) // Add source
-                .flatMap( new FlatMapRecord(new SimpleDateFormat("yy-MM-dd"))) // Generate new record with (ship_id, ship_type, cell_id, ts, trip_id)
+                .flatMap( new FlatMapRecord(new SimpleDateFormat("yy-MM-dd"))) // Generate new record with (ship_id, ship_type, cell_id, ts, trip_id, sea_type)
                 .returns(Record.class)
                 .filter((FilterFunction<Record>) record -> record.getSeaType().compareTo("Occidentale") == 0) // Keeping only records of Western Mediterranean
                 .assignTimestampsAndWatermarks(
@@ -54,12 +54,12 @@ public class Query1 {
 
         cell_data
                 .window(TumblingEventTimeWindows.of(Time.days(7))) // 7 days window
-                .aggregate(new QueryAggregateFunction(), new QueryWindowFunction())
+                .aggregate(new QueryAggregateFunction()) // Returns a string with (time_stamp, ship_t35 ,score_35, ... , ship_to, score_o)
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_week"))); // Add sink
 
         cell_data
                 .window(new MonthAssigner()) // 1 month window
-                .aggregate(new QueryAggregateFunction(), new QueryWindowFunction())
+                .aggregate(new QueryAggregateFunction(), new QueryWindowFunction()) // Returns a string with (time_stamp, ship_t35 ,score_35, ... , ship_to, score_o)
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_month"))); // Add sink
 
         streamExecEnv.execute("Query 1");

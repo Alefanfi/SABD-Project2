@@ -3,9 +3,6 @@ package queries.query1;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import pojo.Record;
 
-import java.util.Calendar;
-import java.util.Date;
-
 public class QueryAggregateFunction implements AggregateFunction<Record, QueryAccumulator, String> {
 
     @Override
@@ -15,11 +12,6 @@ public class QueryAggregateFunction implements AggregateFunction<Record, QueryAc
 
     @Override
     public QueryAccumulator add(Record record, QueryAccumulator accum) {
-
-        // Search for start of the window
-        if(accum.ts.after(record.getTs())){
-            accum.ts = record.getTs();
-        }
 
         // Setting cell id
         if(accum.cell == null){
@@ -63,10 +55,6 @@ public class QueryAggregateFunction implements AggregateFunction<Record, QueryAc
         accum1.ship_cargo += accum2.ship_cargo;
         accum1.ship_other += accum2.ship_other;
 
-        if(accum1.ts.after(accum2.ts)){
-            accum1.ts = accum2.ts;
-        }
-
         return accum1;
     }
 }
@@ -79,6 +67,5 @@ class QueryAccumulator {
     int ship_other = 0;
 
     String cell = null;
-    Date ts = Calendar.getInstance().getTime();
 
 }

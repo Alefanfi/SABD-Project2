@@ -13,6 +13,7 @@ import java.util.Date;
 public class Record implements Serializable {
 
     public enum Shiptype { MILITARY, PASSENGER, CARGO, OTHER }
+    public enum SeaType { OCC, ORI }
 
     private String id;          // ship id
     private Shiptype shipType;  // ship type

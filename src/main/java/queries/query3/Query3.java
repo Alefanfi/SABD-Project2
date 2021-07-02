@@ -42,7 +42,7 @@ public class Query3 {
 
         KeyedStream<Record, String> trip_data = streamExecEnv
                 .addSource(nifiSource)
-                .flatMap(new FlatMapRecord(new SimpleDateFormat("yy-MM-dd HH")))
+                .flatMap(new FlatMapRecord(new SimpleDateFormat("yy-MM-dd HH"))) // Generate new record with (ship_id, ship_type, lon, lat, cell_id, ts, trip_id, sea_type)
                 .returns(Record.class)
                 .assignTimestampsAndWatermarks(
                         WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofDays(1))
@@ -53,14 +53,14 @@ public class Query3 {
         trip_data
                 .window(TumblingEventTimeWindows.of(Time.hours(1))) // 1 hour window
                 .aggregate(new QueryAggregateFunction()) // (time_stamp, trip_id, score)
-                .windowAll(TumblingEventTimeWindows.of(Time.hours(1))) // 1 hour window
+                .windowAll(TumblingEventTimeWindows.of(Time.hours(1)))
                 .process(new QueryAllWindowFunction()) // Returns a string with (time_stamp, id_1 ,score_1, ... , id_5, score_5)
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query3_1h"))); // Add sink
 
         trip_data
                 .window(TumblingEventTimeWindows.of(Time.hours(2))) // 2 hours window
                 .aggregate(new QueryAggregateFunction()) // (time_stamp, trip_id, score)
-                .windowAll(TumblingEventTimeWindows.of(Time.hours(2))) // 2 hours window
+                .windowAll(TumblingEventTimeWindows.of(Time.hours(2)))
                 .process(new QueryAllWindowFunction()) // Returns a string with (time_stamp, id_1 ,score_1, ... , id_5, score_5)
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query3_2h"))); // Add sink
 

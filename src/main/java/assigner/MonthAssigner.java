@@ -33,7 +33,7 @@ public class MonthAssigner extends TumblingEventTimeWindows{
         long start = calendar.getTimeInMillis();
 
         calendar.add(Calendar.MONTH,1);
-        calendar.add(Calendar.DAY_OF_MONTH, -1); // VEDERE SE FUNZIONA
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
 
         long end = calendar.getTimeInMillis();
 

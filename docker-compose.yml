@@ -14,18 +14,11 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        metrics.reporter.influxdb.factory.class: org.apache.flink.metrics.influxdb.InfluxdbReporterFactory
-        metrics.reporter.influxdb.scheme: http
-        metrics.reporter.influxdb.host: influxdb
-        metrics.reporter.influxdb.port: 8086
-        metrics.reporter.influxdb.db: flink
-        metrics.reporter.influxdb.username: metrics
-        metrics.reporter.influxdb.password: metrics123
-        metrics.reporter.influxdb.retentionPolicy: one_hour
-        metrics.reporter.influxdb.consistency: ANY
-        metrics.reporter.influxdb.connectTimeout: 60000
-        metrics.reporter.influxdb.writeTimeout: 60000
-        metrics.reporter.influxdb.interval: 60 SECONDS
+        metrics.reporter.grph.factory.class: org.apache.flink.metrics.graphite.GraphiteReporterFactory
+        metrics.reporter.grph.host: graphite
+        metrics.reporter.grph.port: 2003
+        metrics.reporter.grph.protocol: TCP
+        metrics.reporter.grph.interval: 60 SECONDS
     volumes:
       - ./target:/opt/flink/queries/
 
@@ -40,7 +33,6 @@ services:
         jobmanager.rpc.address: jobmanager
         taskmanager.numberOfTaskSlots: 2
 
-
 # NIFI -----------------------------------------------------------------------------------------------------------------
 
   nifi:
@@ -51,26 +43,6 @@ services:
     volumes:
       - ./nifi:/nifi-conf/
       - nifi_volume:/opt/nifi/nifi-current/conf/
-
-# INFLUXDB -------------------------------------------------------------------------------------------------------------
-
-  #influxdb:
-    #image: influxdb:2.0
-    #container_name: influxdb
-    #ports:
-    #  - '8086:8086' # Web ui Port
-    #environment:
-    #  - DOCKER_INFLUXDB_INIT_MODE=setup
-    #  - DOCKER_INFLUXDB_INIT_USERNAME=admin
-    #  - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
-    #  - DOCKER_INFLUXDB_INIT_ORG=my_org
-    #  - DOCKER_INFLUXDB_INIT_BUCKET=my_bucket
-    #  - V1_DB_NAME=flink
-    #  - V1_RP_NAME=one_hour
-    #  - V1_AUTH_USERNAME=metrics
-    #  - V1_AUTH_PASSWORD=metrics123
-    #volumes:
-    #  - ./influxdb/scripts:/docker-entrypoint-initdb.d
 
 # GRAPHITE -------------------------------------------------------------------------------------------------------------
 
@@ -106,7 +78,7 @@ services:
     environment:
       - GF_INSTALL_PLUGINS=redis-datasource
     ports:
-      - '3000:3000'
+      - '3000:3000' # Web ui port
 
 # ----------------------------------------------------------------------------------------------------------------------
 
