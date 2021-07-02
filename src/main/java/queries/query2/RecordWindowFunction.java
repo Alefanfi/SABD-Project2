@@ -13,7 +13,7 @@ import java.util.List;
 public class RecordWindowFunction extends ProcessAllWindowFunction<Tuple2<Tuple2<String, String>, Tuple2<Integer,Integer>>, String, TimeWindow>{
 
     @Override
-    public void process(Context context, Iterable<Tuple2<Tuple2<String, String>, Tuple2<Integer, Integer>>> iterable, Collector<String> collector) throws Exception {
+    public void process(Context context, Iterable<Tuple2<Tuple2<String, String>, Tuple2<Integer, Integer>>> iterable, Collector<String> collector){
         List<Tuple2<Tuple2<String, String>, Integer>> listAM = new ArrayList<>();
         List<Tuple2<Tuple2<String, String>, Integer>> listPM = new ArrayList<>();
 
