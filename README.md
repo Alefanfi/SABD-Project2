@@ -34,7 +34,9 @@ The number of Flink's taskmanagers can be scaled as needed using docker compose.
 
     docker compose up --scale taskmanager=2
 
-    docker-compose scale taskmanager=5
+## Nifi configuration
+On the first deployment of the cluster you can import the nifi template input.xml from the folder /nifi/templates in the root of the project.
+This template takes the data from the file /nifi/dataset/prj2_dataset.csv reordering them by timestamp and splitting the file into smaller part of 5000 records each.
 
 ## Submit the queries
 To run the queries first you need to create a jar with all the dependencies to submit to Flink.
