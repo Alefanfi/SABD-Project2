@@ -12,7 +12,7 @@ import java.util.*;
 
 public class QueryWindowFunction extends ProcessWindowFunction<Tuple5<String, String, String, Integer, Integer>, String, String, TimeWindow> {
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd 00:00:00");
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
 
     @Override
     public void process(String s, Context context, Iterable<Tuple5<String, String, String, Integer, Integer>> iterable, Collector<String> collector){

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class QueryAllWindowFunction extends ProcessAllWindowFunction<Tuple3<String, String, Double>, String, TimeWindow> {
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:00:00");
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:00:00");
 
     @Override
     public void process(Context context, Iterable<Tuple3<String, String, Double>> iterable, Collector<String> collector) {

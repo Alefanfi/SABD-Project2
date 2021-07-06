@@ -14,6 +14,7 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
+        state.backend.latency-track.keyed-state-enabled: true
         metrics.reporter.grph.factory.class: org.apache.flink.metrics.graphite.GraphiteReporterFactory
         metrics.reporter.grph.host: graphite
         metrics.reporter.grph.port: 2003

@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class QueryWindowFunction extends ProcessWindowFunction<String, String, String, TimeWindow> {
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd 00:00:00");
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
 
     @Override
     public void process(String s, Context context, Iterable<String> iterable, Collector<String> collector) {
