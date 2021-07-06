@@ -1,4 +1,4 @@
-15-04-01,EAST,slot_a,C20,D20,G33,slot_p,C20,D20,G33
-15-04-01,WEST,slot_a,D1,F9,F8,slot_p,D1,H8,F9
-15-03-01,WEST,slot_a,D1,C1,slot_p,D1,C1
-15-03-01,EAST,slot_a,C20,D20,E30,slot_p,G33,C20,D31
+15-04-01 00:00:00,WEST,slot_a,D1,F9,F8,slot_p,D1,F9,H8
+15-04-01 00:00:00,EAST,slot_a,C20,D20,G33,slot_p,C20,D20,G33
+15-03-01 00:00:00,WEST,slot_a,D1,C1,null,slot_p,D1,C1,null
+15-03-01 00:00:00,EAST,slot_a,C20,D20,G34,slot_p,G33,C20,D31

@@ -12,11 +12,12 @@ import java.util.*;
 
 public class QueryWindowFunction extends ProcessWindowFunction<Tuple5<String, String, String, Integer, Integer>, String, String, TimeWindow> {
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
+    SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd 00:00:00");
 
     @Override
     public void process(String s, Context context, Iterable<Tuple5<String, String, String, Integer, Integer>> iterable, Collector<String> collector){
 
+        int i;
         List<Tuple3<String, String, Integer>> listAM = new ArrayList<>();
         List<Tuple3<String, String, Integer>> listPM = new ArrayList<>();
 
@@ -37,14 +38,26 @@ public class QueryWindowFunction extends ProcessWindowFunction<Tuple5<String, St
 
         out += ",slot_a";
 
-        for(int i=0; i<3 && i<listAM.size(); i++) {
+        for(i=0; i<3 && i<listAM.size(); i++) {
             out += "," + listAM.get(i).f1;
+        }
+
+        // Number of fields should be the same
+        while(i<3){
+            out += ",null";
+            i++;
         }
 
         out += ",slot_p";
 
-        for(int j=0; j<3 && j<listPM.size(); j++) {
-            out += "," + listPM.get(j).f1;
+        for(i=0; i<3 && i<listPM.size(); i++) {
+            out += "," + listPM.get(i).f1;
+        }
+
+        // Number of fields should be the same
+        while(i<3){
+            out += ",null";
+            i++;
         }
 
         collector.collect(out);

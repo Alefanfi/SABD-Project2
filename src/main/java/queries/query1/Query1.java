@@ -63,7 +63,7 @@ public class Query1 {
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_month"))); // Add sink
 
         // execute program
-        JobExecutionResult result = streamExecEnv.execute("Query 1");
+        streamExecEnv.execute("Query 1");
     }
 
 }

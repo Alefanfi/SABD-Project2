@@ -1,17 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <template encoding-version="1.3">
     <description></description>
-    <groupId>0a9c1ebb-017a-1000-d873-b9458ae421f7</groupId>
+    <groupId>68c80f89-017a-1000-6c82-7806c550d859</groupId>
     <name>input</name>
     <snippet>
         <connections>
-            <id>4bef15c9-6026-3ffe-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
+            <id>1df27408-2658-33a9-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
             <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
             <backPressureObjectThreshold>10000</backPressureObjectThreshold>
             <destination>
-                <groupId>22f82aa9-56ea-3fd5-0000-000000000000</groupId>
-                <id>6a87ac37-6274-3ed9-0000-000000000000</id>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>beb12c04-be2c-35ca-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </destination>
+            <flowFileExpiration>0 sec</flowFileExpiration>
+            <labelIndex>1</labelIndex>
+            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
+            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
+            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+            <name></name>
+            <selectedRelationships>success</selectedRelationships>
+            <source>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>a510eb7c-2c0e-366c-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </source>
+            <zIndex>0</zIndex>
+        </connections>
+        <connections>
+            <id>4d09c15b-3267-3eb8-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
+            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+            <destination>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>673b36c0-388b-3b00-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </destination>
             <flowFileExpiration>0 sec</flowFileExpiration>
@@ -23,20 +48,20 @@
             <name></name>
             <selectedRelationships>query</selectedRelationships>
             <source>
-                <groupId>22f82aa9-56ea-3fd5-0000-000000000000</groupId>
-                <id>91a1a8f9-e572-3eb5-0000-000000000000</id>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>beb12c04-be2c-35ca-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </source>
             <zIndex>0</zIndex>
         </connections>
         <connections>
-            <id>765b1b7a-b703-3cd0-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
+            <id>6a194c88-299b-3809-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
             <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
             <backPressureObjectThreshold>10000</backPressureObjectThreshold>
             <destination>
-                <groupId>22f82aa9-56ea-3fd5-0000-000000000000</groupId>
-                <id>3ef08fa2-774e-3450-0000-000000000000</id>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>a510eb7c-2c0e-366c-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </destination>
             <flowFileExpiration>0 sec</flowFileExpiration>
@@ -48,20 +73,20 @@
             <name></name>
             <selectedRelationships>success</selectedRelationships>
             <source>
-                <groupId>22f82aa9-56ea-3fd5-0000-000000000000</groupId>
-                <id>da4069b3-f986-304d-0000-000000000000</id>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>1746ab81-b348-3c1c-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </source>
             <zIndex>0</zIndex>
         </connections>
         <connections>
-            <id>81962a32-6679-34e8-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
+            <id>8f86ecd9-7cf8-35a2-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
             <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
             <backPressureObjectThreshold>10000</backPressureObjectThreshold>
             <destination>
-                <groupId>22f82aa9-56ea-3fd5-0000-000000000000</groupId>
-                <id>16c3c4f3-83a9-3c60-0000-000000000000</id>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>0842d63c-764f-39f9-0000-000000000000</id>
                 <type>OUTPUT_PORT</type>
             </destination>
             <flowFileExpiration>0 sec</flowFileExpiration>
@@ -73,21 +98,21 @@
             <name></name>
             <selectedRelationships>splits</selectedRelationships>
             <source>
-                <groupId>22f82aa9-56ea-3fd5-0000-000000000000</groupId>
-                <id>6a87ac37-6274-3ed9-0000-000000000000</id>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>673b36c0-388b-3b00-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </source>
             <zIndex>0</zIndex>
         </connections>
         <connections>
-            <id>b3dffef3-e1a3-3037-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
+            <id>c1c61c9f-38fd-34cc-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
             <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
             <backPressureObjectThreshold>10000</backPressureObjectThreshold>
             <destination>
-                <groupId>22f82aa9-56ea-3fd5-0000-000000000000</groupId>
-                <id>91a1a8f9-e572-3eb5-0000-000000000000</id>
-                <type>PROCESSOR</type>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>9e400816-68a8-30d1-0000-000000000000</id>
+                <type>OUTPUT_PORT</type>
             </destination>
             <flowFileExpiration>0 sec</flowFileExpiration>
             <labelIndex>1</labelIndex>
@@ -96,17 +121,42 @@
             <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
             <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
             <name></name>
-            <selectedRelationships>success</selectedRelationships>
+            <selectedRelationships>splits</selectedRelationships>
             <source>
-                <groupId>22f82aa9-56ea-3fd5-0000-000000000000</groupId>
-                <id>3ef08fa2-774e-3450-0000-000000000000</id>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>673b36c0-388b-3b00-0000-000000000000</id>
+                <type>PROCESSOR</type>
+            </source>
+            <zIndex>0</zIndex>
+        </connections>
+        <connections>
+            <id>d98078ba-4080-30d1-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
+            <backPressureDataSizeThreshold>1 GB</backPressureDataSizeThreshold>
+            <backPressureObjectThreshold>10000</backPressureObjectThreshold>
+            <destination>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>dd174cb3-6eee-3291-0000-000000000000</id>
+                <type>OUTPUT_PORT</type>
+            </destination>
+            <flowFileExpiration>0 sec</flowFileExpiration>
+            <labelIndex>1</labelIndex>
+            <loadBalanceCompression>DO_NOT_COMPRESS</loadBalanceCompression>
+            <loadBalancePartitionAttribute></loadBalancePartitionAttribute>
+            <loadBalanceStatus>LOAD_BALANCE_NOT_CONFIGURED</loadBalanceStatus>
+            <loadBalanceStrategy>DO_NOT_LOAD_BALANCE</loadBalanceStrategy>
+            <name></name>
+            <selectedRelationships>splits</selectedRelationships>
+            <source>
+                <groupId>cdb6bcbb-29f0-37b0-0000-000000000000</groupId>
+                <id>673b36c0-388b-3b00-0000-000000000000</id>
                 <type>PROCESSOR</type>
             </source>
             <zIndex>0</zIndex>
         </connections>
         <controllerServices>
-            <id>11ab32f7-3882-3dd7-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
+            <id>21b36cab-bb7a-3a0e-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
             <bundle>
                 <artifact>nifi-record-serialization-services-nar</artifact>
                 <group>org.apache.nifi</group>
@@ -384,8 +434,8 @@
             <type>org.apache.nifi.csv.CSVRecordSetWriter</type>
         </controllerServices>
         <controllerServices>
-            <id>c27a543a-923b-30ed-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
+            <id>6297d8c8-0dbd-3b60-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
             <bundle>
                 <artifact>nifi-record-serialization-services-nar</artifact>
                 <group>org.apache.nifi</group>
@@ -638,306 +688,53 @@
             <type>org.apache.nifi.csv.CSVReader</type>
         </controllerServices>
         <outputPorts>
-            <id>16c3c4f3-83a9-3c60-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
+            <id>0842d63c-764f-39f9-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
             <position>
-                <x>1208.0</x>
-                <y>48.0</y>
+                <x>544.0</x>
+                <y>488.0</y>
             </position>
             <allowRemoteAccess>true</allowRemoteAccess>
             <comments></comments>
             <concurrentlySchedulableTaskCount>3</concurrentlySchedulableTaskCount>
-            <name>dataset</name>
+            <name>query1</name>
+            <state>STOPPED</state>
+            <transmitting>false</transmitting>
+            <type>OUTPUT_PORT</type>
+        </outputPorts>
+        <outputPorts>
+            <id>9e400816-68a8-30d1-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
+            <position>
+                <x>1392.0</x>
+                <y>488.0</y>
+            </position>
+            <allowRemoteAccess>true</allowRemoteAccess>
+            <comments></comments>
+            <concurrentlySchedulableTaskCount>3</concurrentlySchedulableTaskCount>
+            <name>query3</name>
+            <state>STOPPED</state>
+            <transmitting>false</transmitting>
+            <type>OUTPUT_PORT</type>
+        </outputPorts>
+        <outputPorts>
+            <id>dd174cb3-6eee-3291-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
+            <position>
+                <x>968.0</x>
+                <y>488.0</y>
+            </position>
+            <allowRemoteAccess>true</allowRemoteAccess>
+            <comments></comments>
+            <concurrentlySchedulableTaskCount>3</concurrentlySchedulableTaskCount>
+            <name>query2</name>
             <state>STOPPED</state>
             <transmitting>false</transmitting>
             <type>OUTPUT_PORT</type>
         </outputPorts>
         <processors>
-            <id>3ef08fa2-774e-3450-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
-            <position>
-                <x>296.0</x>
-                <y>240.0</y>
-            </position>
-            <bundle>
-                <artifact>nifi-standard-nar</artifact>
-                <group>org.apache.nifi</group>
-                <version>1.13.2</version>
-            </bundle>
-            <config>
-                <bulletinLevel>WARN</bulletinLevel>
-                <comments></comments>
-                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                <descriptors>
-                    <entry>
-                        <key>record-reader</key>
-                        <value>
-                            <identifiesControllerService>org.apache.nifi.serialization.RecordReaderFactory</identifiesControllerService>
-                            <name>record-reader</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>record-writer</key>
-                        <value>
-                            <identifiesControllerService>org.apache.nifi.serialization.RecordSetWriterFactory</identifiesControllerService>
-                            <name>record-writer</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>replacement-value-strategy</key>
-                        <value>
-                            <name>replacement-value-strategy</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>/TS</key>
-                        <value>
-                            <name>/TS</name>
-                        </value>
-                    </entry>
-                </descriptors>
-                <executionNode>ALL</executionNode>
-                <lossTolerant>false</lossTolerant>
-                <penaltyDuration>30 sec</penaltyDuration>
-                <properties>
-                    <entry>
-                        <key>record-reader</key>
-                        <value>c27a543a-923b-30ed-0000-000000000000</value>
-                    </entry>
-                    <entry>
-                        <key>record-writer</key>
-                        <value>11ab32f7-3882-3dd7-0000-000000000000</value>
-                    </entry>
-                    <entry>
-                        <key>replacement-value-strategy</key>
-                        <value>literal-value</value>
-                    </entry>
-                    <entry>
-                        <key>/TS</key>
-                        <value>${field.value:replaceAll('/',' '):replaceAll('-',' '):toDate('dd MM yy HH:mm'):format('yy-MM-dd HH:mm:ss')}</value>
-                    </entry>
-                </properties>
-                <runDurationMillis>0</runDurationMillis>
-                <schedulingPeriod>0 sec</schedulingPeriod>
-                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                <yieldDuration>1 sec</yieldDuration>
-            </config>
-            <executionNodeRestricted>false</executionNodeRestricted>
-            <name>UpdateRecord</name>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>failure</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>false</autoTerminate>
-                <name>success</name>
-            </relationships>
-            <state>STOPPED</state>
-            <style/>
-            <type>org.apache.nifi.processors.standard.UpdateRecord</type>
-        </processors>
-        <processors>
-            <id>6a87ac37-6274-3ed9-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
-            <position>
-                <x>912.0</x>
-                <y>240.0</y>
-            </position>
-            <bundle>
-                <artifact>nifi-standard-nar</artifact>
-                <group>org.apache.nifi</group>
-                <version>1.13.2</version>
-            </bundle>
-            <config>
-                <bulletinLevel>WARN</bulletinLevel>
-                <comments></comments>
-                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                <descriptors>
-                    <entry>
-                        <key>Record Reader</key>
-                        <value>
-                            <identifiesControllerService>org.apache.nifi.serialization.RecordReaderFactory</identifiesControllerService>
-                            <name>Record Reader</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Record Writer</key>
-                        <value>
-                            <identifiesControllerService>org.apache.nifi.serialization.RecordSetWriterFactory</identifiesControllerService>
-                            <name>Record Writer</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>Records Per Split</key>
-                        <value>
-                            <name>Records Per Split</name>
-                        </value>
-                    </entry>
-                </descriptors>
-                <executionNode>ALL</executionNode>
-                <lossTolerant>false</lossTolerant>
-                <penaltyDuration>30 sec</penaltyDuration>
-                <properties>
-                    <entry>
-                        <key>Record Reader</key>
-                        <value>c27a543a-923b-30ed-0000-000000000000</value>
-                    </entry>
-                    <entry>
-                        <key>Record Writer</key>
-                        <value>11ab32f7-3882-3dd7-0000-000000000000</value>
-                    </entry>
-                    <entry>
-                        <key>Records Per Split</key>
-                        <value>5000</value>
-                    </entry>
-                </properties>
-                <runDurationMillis>0</runDurationMillis>
-                <schedulingPeriod>0 sec</schedulingPeriod>
-                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                <yieldDuration>1 sec</yieldDuration>
-            </config>
-            <executionNodeRestricted>false</executionNodeRestricted>
-            <name>SplitRecord</name>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>failure</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>original</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>false</autoTerminate>
-                <name>splits</name>
-            </relationships>
-            <state>STOPPED</state>
-            <style/>
-            <type>org.apache.nifi.processors.standard.SplitRecord</type>
-        </processors>
-        <processors>
-            <id>91a1a8f9-e572-3eb5-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
-            <position>
-                <x>600.0</x>
-                <y>0.0</y>
-            </position>
-            <bundle>
-                <artifact>nifi-standard-nar</artifact>
-                <group>org.apache.nifi</group>
-                <version>1.13.2</version>
-            </bundle>
-            <config>
-                <bulletinLevel>WARN</bulletinLevel>
-                <comments></comments>
-                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
-                <descriptors>
-                    <entry>
-                        <key>record-reader</key>
-                        <value>
-                            <identifiesControllerService>org.apache.nifi.serialization.RecordReaderFactory</identifiesControllerService>
-                            <name>record-reader</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>record-writer</key>
-                        <value>
-                            <identifiesControllerService>org.apache.nifi.serialization.RecordSetWriterFactory</identifiesControllerService>
-                            <name>record-writer</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>include-zero-record-flowfiles</key>
-                        <value>
-                            <name>include-zero-record-flowfiles</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>cache-schema</key>
-                        <value>
-                            <name>cache-schema</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>dbf-default-precision</key>
-                        <value>
-                            <name>dbf-default-precision</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>dbf-default-scale</key>
-                        <value>
-                            <name>dbf-default-scale</name>
-                        </value>
-                    </entry>
-                    <entry>
-                        <key>query</key>
-                        <value>
-                            <name>query</name>
-                        </value>
-                    </entry>
-                </descriptors>
-                <executionNode>ALL</executionNode>
-                <lossTolerant>false</lossTolerant>
-                <penaltyDuration>30 sec</penaltyDuration>
-                <properties>
-                    <entry>
-                        <key>record-reader</key>
-                        <value>c27a543a-923b-30ed-0000-000000000000</value>
-                    </entry>
-                    <entry>
-                        <key>record-writer</key>
-                        <value>11ab32f7-3882-3dd7-0000-000000000000</value>
-                    </entry>
-                    <entry>
-                        <key>include-zero-record-flowfiles</key>
-                        <value>true</value>
-                    </entry>
-                    <entry>
-                        <key>cache-schema</key>
-                        <value>false</value>
-                    </entry>
-                    <entry>
-                        <key>dbf-default-precision</key>
-                        <value>10</value>
-                    </entry>
-                    <entry>
-                        <key>dbf-default-scale</key>
-                        <value>0</value>
-                    </entry>
-                    <entry>
-                        <key>query</key>
-                        <value>SELECT SHIP_ID,SHIPTYPE,LON,LAT,TS,TRIP_ID
-FROM FLOWFILE
-WHERE LAT BETWEEN 32.0 AND 45.0 AND LON BETWEEN -6.0 AND 37.0
-ORDER BY TS</value>
-                    </entry>
-                </properties>
-                <runDurationMillis>0</runDurationMillis>
-                <schedulingPeriod>0 sec</schedulingPeriod>
-                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
-                <yieldDuration>1 sec</yieldDuration>
-            </config>
-            <executionNodeRestricted>false</executionNodeRestricted>
-            <name>QueryRecord</name>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>failure</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>true</autoTerminate>
-                <name>original</name>
-            </relationships>
-            <relationships>
-                <autoTerminate>false</autoTerminate>
-                <name>query</name>
-            </relationships>
-            <state>STOPPED</state>
-            <style/>
-            <type>org.apache.nifi.processors.standard.QueryRecord</type>
-        </processors>
-        <processors>
-            <id>da4069b3-f986-304d-0000-000000000000</id>
-            <parentGroupId>22f82aa9-56ea-3fd5-0000-000000000000</parentGroupId>
+            <id>1746ab81-b348-3c1c-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
             <position>
                 <x>0.0</x>
                 <y>0.0</y>
@@ -1090,6 +887,288 @@ ORDER BY TS</value>
             <style/>
             <type>org.apache.nifi.processors.standard.GetFile</type>
         </processors>
+        <processors>
+            <id>673b36c0-388b-3b00-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
+            <position>
+                <x>912.0</x>
+                <y>240.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-standard-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.13.2</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>Record Reader</key>
+                        <value>
+                            <identifiesControllerService>org.apache.nifi.serialization.RecordReaderFactory</identifiesControllerService>
+                            <name>Record Reader</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Record Writer</key>
+                        <value>
+                            <identifiesControllerService>org.apache.nifi.serialization.RecordSetWriterFactory</identifiesControllerService>
+                            <name>Record Writer</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>Records Per Split</key>
+                        <value>
+                            <name>Records Per Split</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>Record Reader</key>
+                        <value>6297d8c8-0dbd-3b60-0000-000000000000</value>
+                    </entry>
+                    <entry>
+                        <key>Record Writer</key>
+                        <value>21b36cab-bb7a-3a0e-0000-000000000000</value>
+                    </entry>
+                    <entry>
+                        <key>Records Per Split</key>
+                        <value>5000</value>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>SplitRecord</name>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>failure</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>original</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>splits</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.standard.SplitRecord</type>
+        </processors>
+        <processors>
+            <id>a510eb7c-2c0e-366c-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
+            <position>
+                <x>296.0</x>
+                <y>240.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-standard-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.13.2</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>record-reader</key>
+                        <value>
+                            <identifiesControllerService>org.apache.nifi.serialization.RecordReaderFactory</identifiesControllerService>
+                            <name>record-reader</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>record-writer</key>
+                        <value>
+                            <identifiesControllerService>org.apache.nifi.serialization.RecordSetWriterFactory</identifiesControllerService>
+                            <name>record-writer</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>replacement-value-strategy</key>
+                        <value>
+                            <name>replacement-value-strategy</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>/TS</key>
+                        <value>
+                            <name>/TS</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>record-reader</key>
+                        <value>6297d8c8-0dbd-3b60-0000-000000000000</value>
+                    </entry>
+                    <entry>
+                        <key>record-writer</key>
+                        <value>21b36cab-bb7a-3a0e-0000-000000000000</value>
+                    </entry>
+                    <entry>
+                        <key>replacement-value-strategy</key>
+                        <value>literal-value</value>
+                    </entry>
+                    <entry>
+                        <key>/TS</key>
+                        <value>${field.value:replaceAll('/',' '):replaceAll('-',' '):toDate('dd MM yy HH:mm'):format('yy-MM-dd HH:mm:ss')}</value>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>UpdateRecord</name>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>failure</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>success</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.standard.UpdateRecord</type>
+        </processors>
+        <processors>
+            <id>beb12c04-be2c-35ca-0000-000000000000</id>
+            <parentGroupId>cdb6bcbb-29f0-37b0-0000-000000000000</parentGroupId>
+            <position>
+                <x>600.0</x>
+                <y>0.0</y>
+            </position>
+            <bundle>
+                <artifact>nifi-standard-nar</artifact>
+                <group>org.apache.nifi</group>
+                <version>1.13.2</version>
+            </bundle>
+            <config>
+                <bulletinLevel>WARN</bulletinLevel>
+                <comments></comments>
+                <concurrentlySchedulableTaskCount>1</concurrentlySchedulableTaskCount>
+                <descriptors>
+                    <entry>
+                        <key>record-reader</key>
+                        <value>
+                            <identifiesControllerService>org.apache.nifi.serialization.RecordReaderFactory</identifiesControllerService>
+                            <name>record-reader</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>record-writer</key>
+                        <value>
+                            <identifiesControllerService>org.apache.nifi.serialization.RecordSetWriterFactory</identifiesControllerService>
+                            <name>record-writer</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>include-zero-record-flowfiles</key>
+                        <value>
+                            <name>include-zero-record-flowfiles</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>cache-schema</key>
+                        <value>
+                            <name>cache-schema</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>dbf-default-precision</key>
+                        <value>
+                            <name>dbf-default-precision</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>dbf-default-scale</key>
+                        <value>
+                            <name>dbf-default-scale</name>
+                        </value>
+                    </entry>
+                    <entry>
+                        <key>query</key>
+                        <value>
+                            <name>query</name>
+                        </value>
+                    </entry>
+                </descriptors>
+                <executionNode>ALL</executionNode>
+                <lossTolerant>false</lossTolerant>
+                <penaltyDuration>30 sec</penaltyDuration>
+                <properties>
+                    <entry>
+                        <key>record-reader</key>
+                        <value>6297d8c8-0dbd-3b60-0000-000000000000</value>
+                    </entry>
+                    <entry>
+                        <key>record-writer</key>
+                        <value>21b36cab-bb7a-3a0e-0000-000000000000</value>
+                    </entry>
+                    <entry>
+                        <key>include-zero-record-flowfiles</key>
+                        <value>true</value>
+                    </entry>
+                    <entry>
+                        <key>cache-schema</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
+                        <key>dbf-default-precision</key>
+                        <value>10</value>
+                    </entry>
+                    <entry>
+                        <key>dbf-default-scale</key>
+                        <value>0</value>
+                    </entry>
+                    <entry>
+                        <key>query</key>
+                        <value>SELECT SHIP_ID,SHIPTYPE,LON,LAT,TS,TRIP_ID
+FROM FLOWFILE
+ORDER BY TS</value>
+                    </entry>
+                </properties>
+                <runDurationMillis>0</runDurationMillis>
+                <schedulingPeriod>0 sec</schedulingPeriod>
+                <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+                <yieldDuration>1 sec</yieldDuration>
+            </config>
+            <executionNodeRestricted>false</executionNodeRestricted>
+            <name>QueryRecord</name>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>failure</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>true</autoTerminate>
+                <name>original</name>
+            </relationships>
+            <relationships>
+                <autoTerminate>false</autoTerminate>
+                <name>query</name>
+            </relationships>
+            <state>STOPPED</state>
+            <style/>
+            <type>org.apache.nifi.processors.standard.QueryRecord</type>
+        </processors>
     </snippet>
-    <timestamp>07/02/2021 18:21:25 UTC</timestamp>
+    <timestamp>07/06/2021 14:06:04 UTC</timestamp>
 </template>
