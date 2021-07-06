@@ -43,11 +43,11 @@ To run the queries first you need to create a jar with all the dependencies to s
 
     mvn compile assembly:single
 
-You can find a script in the folder /scripts which has all the needed logic to submit a job to the jobmanager, so you just need to specify which of the three queries you wish to compute.
+You can find a script in the folder /scripts which has all the needed logic to submit a job to the jobmanager, so you just need to specify which of the three queries you wish to compute and the parallelism.
 
-    sh submit-job.sh 1
+    sh submit-job.sh 1 3
 
-(eg. Submits query 1 to the cluster )
+(eg. Submits query 1 to the cluster with default parallelism of 3)
 
 ## Frameworks
 * [<img src="https://miro.medium.com/max/400/1*b-i9e82pUCgJbsg3lpdFnA.jpeg" width=70px>](https://nifi.apache.org/)

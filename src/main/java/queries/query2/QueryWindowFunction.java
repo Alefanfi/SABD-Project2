@@ -1,7 +1,7 @@
 package queries.query2;
 
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.api.java.tuple.Tuple4;
+import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
@@ -10,20 +10,20 @@ import org.apache.flink.util.Collector;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class QueryWindowFunction extends ProcessWindowFunction<Tuple4<String, String, Integer, Integer>, String, String, TimeWindow> {
+public class QueryWindowFunction extends ProcessWindowFunction<Tuple5<String, String, String, Integer, Integer>, String, String, TimeWindow> {
 
     SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd");
 
     @Override
-    public void process(String s, Context context, Iterable<Tuple4<String, String, Integer, Integer>> iterable, Collector<String> collector){
+    public void process(String s, Context context, Iterable<Tuple5<String, String, String, Integer, Integer>> iterable, Collector<String> collector){
 
         List<Tuple3<String, String, Integer>> listAM = new ArrayList<>();
         List<Tuple3<String, String, Integer>> listPM = new ArrayList<>();
 
         iterable.iterator().forEachRemaining(t -> {
 
-            listAM.add(new Tuple3<>(t.f0, t.f1, t.f2));
-            listPM.add(new Tuple3<>(t.f0, t.f1, t.f3));
+            listAM.add(new Tuple3<>(t.f1, t.f2, t.f3));
+            listPM.add(new Tuple3<>(t.f1, t.f2, t.f4));
 
         });
 

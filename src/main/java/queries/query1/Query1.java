@@ -1,7 +1,7 @@
 package queries.query1;
 
-import common.MonthAssigner;
-import common.FlatMapRecord;
+import common.*;
+import common.Record;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.eventtime.*;
 import org.apache.flink.api.common.functions.FilterFunction;
@@ -15,12 +15,9 @@ import org.apache.flink.streaming.connectors.redis.RedisSink;
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 import org.apache.nifi.remote.client.SiteToSiteClient;
 import org.apache.nifi.remote.client.SiteToSiteClientConfig;
-import common.Record;
-import common.MyRedisMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 public class Query1 {
 
@@ -32,7 +29,7 @@ public class Query1 {
         // Nifi source
         SiteToSiteClientConfig clientConfig = new SiteToSiteClient.Builder()
                 .url("http://nifi:8080/nifi")
-                .portName("dataset")
+                .portName("query1")
                 .requestBatchCount(5)
                 .buildConfig();
 
@@ -46,9 +43,10 @@ public class Query1 {
                 .addSource(nifiSource) // Add source
                 .flatMap( new FlatMapRecord(new SimpleDateFormat("yy-MM-dd"))) // Generate new record with (ship_id, ship_type, cell_id, ts, trip_id, sea_type)
                 .returns(Record.class)
+                .filter(new FilterRecord()) // lat in [32,45] and lon in [-6,37]
                 .filter((FilterFunction<Record>) record -> record.getSeaType().compareTo(Record.Seatype.WEST) == 0) // Keeping only records of Western Mediterranean
                 .assignTimestampsAndWatermarks(
-                        WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofDays(1))
+                        WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofHours(1))
                         .withTimestampAssigner((record, timestamp) -> record.getTs().getTime()) // Assigning timestamps
                 )
                 .keyBy(Record::getCell); // Grouping by cell id
@@ -65,8 +63,7 @@ public class Query1 {
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_month"))); // Add sink
 
         // execute program
-        JobExecutionResult result = streamExecEnv.execute("Query 1");;
-        System.out.println("The job took " + result.getNetRuntime(TimeUnit.SECONDS) + " to execute");
+        JobExecutionResult result = streamExecEnv.execute("Query 1");
     }
 
 }

@@ -2,7 +2,8 @@ package queries.query3;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
 import common.Record;
-import scala.Tuple3;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class QueryAggregateFunction implements AggregateFunction<Record, QueryAccumulator, Tuple3<String, String, Double>> {
+public class QueryAggregateFunction implements AggregateFunction<Record, QueryAccumulator, Tuple2<String, Double>> {
 
     /* HashMap of trips:
         key = trip_id
@@ -42,7 +43,7 @@ public class QueryAggregateFunction implements AggregateFunction<Record, QueryAc
         while(iter.hasNext()){
             Map.Entry<String, Tuple3<Double, Double, Date>> trip = (Map.Entry)iter.next();
 
-            if(trip.getValue()._3().before(date)){
+            if(trip.getValue().f2.before(date)){
                 // Trip has already ended
                 iter.remove();
             }
@@ -78,8 +79,8 @@ public class QueryAggregateFunction implements AggregateFunction<Record, QueryAc
             }
             else{
                 // Get initial (lon,lat)
-                accum.lon = trip._1();
-                accum.lat = trip._2();
+                accum.lon = trip.f0;
+                accum.lat = trip.f1;
 
                 accum.score = computeScore(accum.lon, accum.lat, record.getLon(), record.getLat());
             }
@@ -96,10 +97,9 @@ public class QueryAggregateFunction implements AggregateFunction<Record, QueryAc
     }
 
     @Override
-    public Tuple3<String, String, Double> getResult(QueryAccumulator accum) {
+    public Tuple2<String, Double> getResult(QueryAccumulator accum) {
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:00:00");
-        return new Tuple3<>(formatter.format(accum.maxTs),accum.trip_id, accum.score); // (time_stamp, trip_id, score)
+        return new Tuple2<>(accum.trip_id, accum.score); // (trip_id, score)
 
     }
 

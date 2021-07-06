@@ -1,10 +1,10 @@
 package queries.query3;
 
 import org.apache.commons.collections.IteratorUtils;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.functions.windowing.ProcessAllWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
-import scala.Tuple3;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -20,7 +20,7 @@ public class QueryAllWindowFunction extends ProcessAllWindowFunction<Tuple3<Stri
     public void process(Context context, Iterable<Tuple3<String, String, Double>> iterable, Collector<String> collector) {
 
         List<Tuple3<String, String, Double>> scores = IteratorUtils.toList(iterable.iterator());
-        scores.sort(Comparator.comparing(Tuple3::_3)); // Sorting by score
+        scores.sort(Comparator.comparing(t -> t.f2)); // Sorting by score
         Collections.reverse(scores); // Dec order
 
         String out =  formatter.format(new Date(context.window().getStart())); // time_stamp
@@ -29,7 +29,7 @@ public class QueryAllWindowFunction extends ProcessAllWindowFunction<Tuple3<Stri
 
             Tuple3<String, String, Double> t = scores.get(i);
 
-            out += "," + t._2() + "," + String.format("%.3f", t._3()); // trip_id, score
+            out += "," + t.f1 + "," + String.format("%.3f", t.f2); // trip_id, score
         }
 
         collector.collect(out);

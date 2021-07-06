@@ -1,5 +1,7 @@
 package queries.query3;
 
+
+import common.FilterRecord;
 import common.FlatMapRecord;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
@@ -30,7 +32,7 @@ public class Query3 {
         // Nifi source
         SiteToSiteClientConfig clientConfig = new SiteToSiteClient.Builder()
                 .url("http://nifi:8080/nifi")
-                .portName("dataset")
+                .portName("query3")
                 .requestBatchCount(5)
                 .buildConfig();
 
@@ -44,22 +46,23 @@ public class Query3 {
                 .addSource(nifiSource)
                 .flatMap(new FlatMapRecord(new SimpleDateFormat("yy-MM-dd HH"))) // Generate new record with (ship_id, ship_type, lon, lat, cell_id, ts, trip_id, sea_type)
                 .returns(Record.class)
+                .filter(new FilterRecord()) // lat in [32,45] and lon in [-6,37]
                 .assignTimestampsAndWatermarks(
-                        WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofDays(1))
+                        WatermarkStrategy.<Record>forBoundedOutOfOrderness(Duration.ofHours(1))
                                 .withTimestampAssigner((record, timestamp) -> record.getTs().getTime()) // Assigning timestamps
                 )
                 .keyBy(Record::getTrip); // Grouping by trip_id
 
         trip_data
                 .window(TumblingEventTimeWindows.of(Time.hours(1))) // 1 hour window
-                .aggregate(new QueryAggregateFunction()) // (time_stamp, trip_id, score)
+                .aggregate(new QueryAggregateFunction(), new TimestampWindowFunction()) // (time_stamp, trip_id, score)
                 .windowAll(TumblingEventTimeWindows.of(Time.hours(1)))
                 .process(new QueryAllWindowFunction()) // Returns a string with (time_stamp, id_1 ,score_1, ... , id_5, score_5)
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query3_1h"))); // Add sink
 
         trip_data
                 .window(TumblingEventTimeWindows.of(Time.hours(2))) // 2 hours window
-                .aggregate(new QueryAggregateFunction()) // (time_stamp, trip_id, score)
+                .aggregate(new QueryAggregateFunction(), new TimestampWindowFunction()) // (time_stamp, trip_id, score)
                 .windowAll(TumblingEventTimeWindows.of(Time.hours(2)))
                 .process(new QueryAllWindowFunction()) // Returns a string with (time_stamp, id_1 ,score_1, ... , id_5, score_5)
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query3_2h"))); // Add sink
