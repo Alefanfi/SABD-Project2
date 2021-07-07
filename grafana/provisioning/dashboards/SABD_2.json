@@ -1,0 +1,1080 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_CSV_SABD2",
+      "label": "CSV SABD2",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "marcusolsson-csv-datasource",
+      "pluginName": "CSV"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.0.4"
+    },
+    {
+      "type": "datasource",
+      "id": "marcusolsson-csv-datasource",
+      "name": "CSV",
+      "version": "0.6.1"
+    },
+    {
+      "type": "panel",
+      "id": "piechart",
+      "name": "Pie chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 11,
+      "panels": [],
+      "title": "western mediterranean",
+      "type": "row"
+    },
+    {
+      "datasource": "CSV SABD2",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "military"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "others"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cargo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "passenger"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 13,
+      "options": {
+        "displayLabels": [
+          "value"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "values": []
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.0.3",
+      "targets": [
+        {
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": false,
+          "ignoreUnknown": false,
+          "path": "/query1_week.csv",
+          "queryType": "randomWalk",
+          "refId": "A",
+          "schema": [
+            {
+              "name": "Field 1",
+              "type": "time"
+            },
+            {
+              "name": "Field 4",
+              "type": "number"
+            },
+            {
+              "name": "Field 6",
+              "type": "number"
+            },
+            {
+              "name": "Field 8",
+              "type": "number"
+            },
+            {
+              "name": "Field 10",
+              "type": "number"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "title": "Mean number of ships in western mediterranean",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field 3": true,
+              "Field 5": true,
+              "Field 7": true,
+              "Field 9": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Field 1": "Date",
+              "Field 10": "others",
+              "Field 2": "Cell ID",
+              "Field 4": "military",
+              "Field 6": "passenger",
+              "Field 8": "cargo"
+            }
+          }
+        }
+      ],
+      "type": "piechart"
+    },
+    {
+      "datasource": "CSV SABD2",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cargo (mean)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2495C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "military (mean)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "others (mean)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "passenger (mean)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": false,
+          "ignoreUnknown": false,
+          "path": "/query1_week.csv",
+          "queryType": "randomWalk",
+          "refId": "A",
+          "schema": [
+            {
+              "name": "Field 1",
+              "type": "time"
+            },
+            {
+              "name": "Field 4",
+              "type": "number"
+            },
+            {
+              "name": "Field 6",
+              "type": "number"
+            },
+            {
+              "name": "Field 8",
+              "type": "number"
+            },
+            {
+              "name": "Field 10",
+              "type": "number"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Mean number of ships per cell in western mediterranean",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field 2": true,
+              "Field 3": true,
+              "Field 5": true,
+              "Field 7": true,
+              "Field 9": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Field 1": "Date",
+              "Field 10": "others",
+              "Field 2": "Cell ID",
+              "Field 3": "",
+              "Field 4": "military",
+              "Field 6": "passenger",
+              "Field 8": "cargo"
+            }
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Date": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "cargo": {
+                "aggregations": [
+                  "mean"
+                ],
+                "operation": "aggregate"
+              },
+              "military": {
+                "aggregations": [
+                  "mean"
+                ],
+                "operation": "aggregate"
+              },
+              "others": {
+                "aggregations": [
+                  "mean"
+                ],
+                "operation": "aggregate"
+              },
+              "passenger": {
+                "aggregations": [
+                  "mean"
+                ],
+                "operation": "aggregate"
+              }
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "id": 9,
+      "panels": [],
+      "title": "Queries results tables",
+      "type": "row"
+    },
+    {
+      "datasource": "CSV SABD2",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 11
+      },
+      "id": 2,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": false,
+          "ignoreUnknown": false,
+          "path": "/query1_month.csv",
+          "queryType": "randomWalk",
+          "refId": "A",
+          "schema": [
+            {
+              "name": "Field 1",
+              "type": "string"
+            },
+            {
+              "name": "Field 4",
+              "type": "number"
+            },
+            {
+              "name": "Field 6",
+              "type": "number"
+            },
+            {
+              "name": "Field 8",
+              "type": "number"
+            },
+            {
+              "name": "Field 10",
+              "type": "number"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "title": "query1_month",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field 3": true,
+              "Field 5": true,
+              "Field 7": true,
+              "Field 9": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Field 1": "Date",
+              "Field 10": "others",
+              "Field 2": "Cell ID",
+              "Field 3": "",
+              "Field 4": "military",
+              "Field 6": "passenger",
+              "Field 8": "cargo"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": "CSV SABD2",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 11
+      },
+      "id": 3,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": false,
+          "ignoreUnknown": false,
+          "path": "/query1_week.csv",
+          "queryType": "randomWalk",
+          "refId": "A",
+          "schema": [
+            {
+              "name": "Field 1",
+              "type": "string"
+            },
+            {
+              "name": "Field 4",
+              "type": "number"
+            },
+            {
+              "name": "Field 6",
+              "type": "number"
+            },
+            {
+              "name": "Field 8",
+              "type": "number"
+            },
+            {
+              "name": "Field 10",
+              "type": "number"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "title": "query1_week",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field 3": true,
+              "Field 5": true,
+              "Field 7": true,
+              "Field 9": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Field 1": "Date",
+              "Field 10": "others",
+              "Field 2": "Cell ID",
+              "Field 3": "",
+              "Field 4": "military",
+              "Field 6": "passenger",
+              "Field 8": "cargo"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": "CSV SABD2",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 4,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": false,
+          "ignoreUnknown": false,
+          "path": "/query2_month.csv",
+          "queryType": "randomWalk",
+          "refId": "A",
+          "schema": [
+            {
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "title": "query2_month",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field 3": true,
+              "Field 5": false,
+              "Field 7": true,
+              "Field 9": false
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Field 1": "Date",
+              "Field 10": "pm_third",
+              "Field 2": "Sea",
+              "Field 3": "",
+              "Field 4": "am_first",
+              "Field 5": "am_second",
+              "Field 6": "am_third",
+              "Field 8": "pm_first",
+              "Field 9": "pm_second"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": "CSV SABD2",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 28
+      },
+      "id": 5,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": false,
+          "ignoreUnknown": false,
+          "path": "/query2_week.csv",
+          "queryType": "randomWalk",
+          "refId": "A",
+          "schema": [
+            {
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "title": "query2_week",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field 3": true,
+              "Field 5": false,
+              "Field 7": true,
+              "Field 9": false
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Field 1": "Date",
+              "Field 10": "pm_third",
+              "Field 2": "Sea",
+              "Field 3": "",
+              "Field 4": "am_first",
+              "Field 5": "am_second",
+              "Field 6": "am_third",
+              "Field 8": "pm_first",
+              "Field 9": "pm_second"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": "CSV SABD2",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "id": 6,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": false,
+          "ignoreUnknown": false,
+          "path": "/query3_1h.csv",
+          "queryType": "randomWalk",
+          "refId": "A",
+          "schema": [
+            {
+              "name": "Field 3",
+              "type": "number"
+            },
+            {
+              "name": "Field 5",
+              "type": "number"
+            },
+            {
+              "name": "Field 7",
+              "type": "number"
+            },
+            {
+              "name": "Field 9",
+              "type": "number"
+            },
+            {
+              "name": "Field 11",
+              "type": "number"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "title": "query3_1h",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field 3": false,
+              "Field 5": false,
+              "Field 7": false,
+              "Field 9": false
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Field 1": "Date",
+              "Field 10": "fifth_ID",
+              "Field 11": "fifth_score",
+              "Field 2": "first_ID",
+              "Field 3": "first_score",
+              "Field 4": "second_ID",
+              "Field 5": "second_score",
+              "Field 6": "third_ID",
+              "Field 7": "third_score",
+              "Field 8": "forth_ID",
+              "Field 9": "forth_score"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": "CSV SABD2",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 46
+      },
+      "id": 7,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "decimalSeparator": ".",
+          "delimiter": ",",
+          "header": false,
+          "ignoreUnknown": false,
+          "path": "/query3_2h.csv",
+          "queryType": "randomWalk",
+          "refId": "A",
+          "schema": [
+            {
+              "name": "Field 3",
+              "type": "number"
+            },
+            {
+              "name": "Field 5",
+              "type": "number"
+            },
+            {
+              "name": "Field 7",
+              "type": "number"
+            },
+            {
+              "name": "Field 9",
+              "type": "number"
+            },
+            {
+              "name": "Field 11",
+              "type": "number"
+            }
+          ],
+          "skipRows": 0
+        }
+      ],
+      "title": "query3_2h",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field 3": false,
+              "Field 5": false,
+              "Field 7": false,
+              "Field 9": false
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Field 1": "Date",
+              "Field 10": "fifth_ID",
+              "Field 11": "fifth_score",
+              "Field 2": "first_ID",
+              "Field 3": "first_score",
+              "Field 4": "second_ID",
+              "Field 5": "second_score",
+              "Field 6": "third_ID",
+              "Field 7": "third_score",
+              "Field 8": "forth_ID",
+              "Field 9": "forth_score"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2015-03-12T00:00:00.000Z",
+    "to": "2015-05-07T00:00:00.000Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "SABD_2",
+  "uid": "tgR4kkink",
+  "version": 22
+}

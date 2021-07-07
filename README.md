@@ -58,3 +58,15 @@ You can find a script in the folder /scripts which has all the needed logic to s
 ## Web UI
 * http://localhost:9090/nifi &nbsp;&nbsp;&nbsp; nifi
 * http://localhost:8081 &nbsp;&nbsp;&nbsp; flink jobmanager
+* http://localhost:80 &nbsp;&nbsp;&nbsp; graphite
+
+## Visualization
+To visualize both the queries' results and the system's metrics you can use the dashboards which have already been configured inside the [Grafana](https://grafana.com/) instance running in one of the docker containers.
+
+1. Connect to http://localhost:3000
+2. Insert the credentials
+    * user = admin
+    * password = admin
+3. Open a dashboard
+    * SABD_2 : contains all the queries' results 
+    * SABD_2 metrics: contains metrics send by Flink's metrics reporter to graphite

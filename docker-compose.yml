@@ -15,6 +15,7 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
         state.backend.latency-track.keyed-state-enabled: true
+        metrics.reporters: grph
         metrics.reporter.grph.factory.class: org.apache.flink.metrics.graphite.GraphiteReporterFactory
         metrics.reporter.grph.host: graphite
         metrics.reporter.grph.port: 2003
@@ -33,6 +34,12 @@ services:
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
         taskmanager.numberOfTaskSlots: 2
+        metrics.reporters: grph
+        metrics.reporter.grph.factory.class: org.apache.flink.metrics.graphite.GraphiteReporterFactory
+        metrics.reporter.grph.host: graphite
+        metrics.reporter.grph.port: 2003
+        metrics.reporter.grph.protocol: TCP
+        metrics.reporter.grph.interval: 60 SECONDS
 
 # NIFI -----------------------------------------------------------------------------------------------------------------
 
@@ -77,9 +84,11 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     environment:
-      - GF_INSTALL_PLUGINS=redis-datasource
+      - GF_INSTALL_PLUGINS=marcusolsson-csv-datasource,redis-datasource
     ports:
       - '3000:3000' # Web ui port
+    volumes:
+    - ./grafana/provisioning/:/etc/grafana/provisioning/
 
 # ----------------------------------------------------------------------------------------------------------------------
 
