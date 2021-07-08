@@ -57,6 +57,7 @@ public class Query2 {
                 .keyBy(t -> t.f1) // Grouping by sea_type
                 .window(TumblingEventTimeWindows.of(Time.days(7))) // 7 days window
                 .process(new QueryWindowFunction()) // returns (timestamp, sea_type, slot_am, cell_1a, ..., slot_pm, cell_1p, ...)
+                .map(new MetricsMapper())
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query2_week"))); // Add sink
 
         sea_data
@@ -65,6 +66,7 @@ public class Query2 {
                 .keyBy(t -> t.f1) // Grouping by sea_type
                 .window(new MonthAssigner()) // 1 month window
                 .process(new QueryWindowFunction()) // returns (timestamp, sea_type, slot_am, cell_1a, ..., slot_pm, cell_1p, ...)
+                .map(new MetricsMapper())
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query2_month"))); // Add sink
 
 

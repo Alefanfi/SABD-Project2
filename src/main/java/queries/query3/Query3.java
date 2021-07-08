@@ -1,8 +1,8 @@
 package queries.query3;
 
 
-import common.FilterRecord;
-import common.FlatMapRecord;
+import common.*;
+import common.Record;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -15,8 +15,6 @@ import org.apache.flink.streaming.connectors.redis.RedisSink;
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 import org.apache.nifi.remote.client.SiteToSiteClient;
 import org.apache.nifi.remote.client.SiteToSiteClientConfig;
-import common.Record;
-import common.MyRedisMapper;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -58,6 +56,7 @@ public class Query3 {
                 .aggregate(new QueryAggregateFunction(), new TimestampWindowFunction()) // (time_stamp, trip_id, score)
                 .windowAll(TumblingEventTimeWindows.of(Time.hours(1)))
                 .process(new QueryAllWindowFunction()) // Returns a string with (time_stamp, id_1 ,score_1, ... , id_5, score_5)
+                .map(new MetricsMapper())
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query3_1h"))); // Add sink
 
         trip_data
@@ -65,6 +64,7 @@ public class Query3 {
                 .aggregate(new QueryAggregateFunction(), new TimestampWindowFunction()) // (time_stamp, trip_id, score)
                 .windowAll(TumblingEventTimeWindows.of(Time.hours(2)))
                 .process(new QueryAllWindowFunction()) // Returns a string with (time_stamp, id_1 ,score_1, ... , id_5, score_5)
+                .map(new MetricsMapper())
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query3_2h"))); // Add sink
 
 

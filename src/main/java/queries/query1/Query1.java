@@ -2,7 +2,6 @@ package queries.query1;
 
 import common.*;
 import common.Record;
-import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.eventtime.*;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
@@ -55,11 +54,13 @@ public class Query1 {
         cell_data
                 .window(TumblingEventTimeWindows.of(Time.days(7))) // 7 days window
                 .aggregate(new QueryAggregateFunction(), new QueryWindowFunction()) // Returns a string with (time_stamp, ship_t35 ,score_35, ... , ship_to, score_o)
+                .map(new MetricsMapper())
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_week"))); // Add sink
 
         cell_data
                 .window(new MonthAssigner()) // 1 month window
                 .aggregate(new QueryAggregateFunction(), new QueryWindowFunction()) // Returns a string with (time_stamp, ship_t35 ,score_35, ... , ship_to, score_o)
+                .map(new MetricsMapper())
                 .addSink(new RedisSink<>(conf, new MyRedisMapper("query1_month"))); // Add sink
 
         // execute program
